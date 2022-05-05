@@ -1,0 +1,11 @@
+<?php
+$escape = $this->plugin('escapeHtml');
+?>
+
+<?php echo $this->pageTitle($this->translate('Data Repository Connector'), 1, $this->translate('CKAN Import')); ?>
+<?php echo $this->form()->openTag($form); ?>
+<div id="page-actions">
+    <button><?php echo $this->escapeHtml($this->translate('Submit')); ?></button>
+</div>
+<?php echo $this->formCollection($form, false); ?>
+<?php echo $this->form()->closeTag($form); ?>
