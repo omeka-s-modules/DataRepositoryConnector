@@ -51,7 +51,7 @@ class ZenodoForm extends Form
             'type' => 'text',
             'options' => [
                 'label' => 'Zenodo Community ID', // @translate
-                'info' => 'Short string identifying which Zenodo community to import from. Found in URL after https://zenodo.org/communities/', // @translate
+                'info' => 'Short string identifying which Zenodo community to import from. Found in URL after https://zenodo.org/communities/ and before any search parameters. Example: lory_hslu', // @translate
             ],
             'attributes' => [
                 'id' => 'collection_id',
