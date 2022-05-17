@@ -4,6 +4,7 @@ namespace DataRepositoryConnector\DataRepoSelector;
 use Laminas\Http\Client as HttpClient;
 use Omeka\Api\Manager as ApiManager;
 use Omeka\Settings\Settings as Settings;
+use Omeka\Job\Exception;
 use Laminas\Stdlib\Parameters;
 use DateTime;
 

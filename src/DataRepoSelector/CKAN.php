@@ -4,6 +4,7 @@ namespace DataRepositoryConnector\DataRepoSelector;
 use Laminas\Http\Client as HttpClient;
 use Omeka\Api\Manager as ApiManager;
 use Omeka\Settings\Settings as Settings;
+use Omeka\Job\Exception;
 use Laminas\Stdlib\Parameters;
 use DateTime;
 
@@ -74,7 +75,7 @@ class CKAN implements DataRepoSelectorInterface
         $collectionResponse = $this->client->send();
         if (!$collectionResponse->isSuccess()) {
             throw new Exception\RuntimeException(sprintf(
-                'Requested "%s" got "%s".', $link, $response->renderStatusLine()
+                'Requested "%s" got "%s".', $link, $collectionResponse->renderStatusLine()
             ));
         }
         
