@@ -101,7 +101,7 @@ class DataverseForm extends Form
             'type' => 'checkbox',
             'options' => [
                 'label' => 'Import files into Omeka S', // @translate
-                'info' => 'If checked, all data files associated with a record will be imported into Omeka S', // @translate
+                'info' => 'If checked, all data files associated with a record will be imported into Omeka S.', // @translate
             ],
             'attributes' => [
                 'id' => 'ingest-files',
@@ -113,7 +113,7 @@ class DataverseForm extends Form
             'type' => 'textarea',
             'options' => [
                 'label' => 'Comment', // @translate
-                'info' => 'A note about the purpose or source of this import', // @translate
+                'info' => 'A note about the purpose or source of this import.', // @translate
             ],
             'attributes' => [
                 'id' => 'comment',

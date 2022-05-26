@@ -66,7 +66,7 @@ class CKANForm extends Form
             'type' => 'text',
             'options' => [
                 'label' => 'CKAN Organization', // @translate
-                'info' => 'The identifier of the CKAN organization to import from. Example: city-of-new-york. If organization & group field are blank, all datasets under Main CKAN URL above will be imported.', // @translate
+                'info' => 'The identifier of the CKAN organization to import from. Example: city-of-new-york. If organization field is blank, all datasets under Main CKAN URL above will be imported.', // @translate
             ],
             'attributes' => [
                 'id' => 'collection_id',
@@ -78,7 +78,7 @@ class CKANForm extends Form
             'type' => 'text',
             'options' => [
                 'label' => 'Limit', // @translate
-                'info' => 'The maximum number of results to retrieve at once from Zenodo community. If you notice errors or missing data, try lowering this number. Increasing it might make imports faster.', // @translate
+                'info' => 'The maximum number of results to retrieve at once from CKAN instance. If you notice errors or missing data, try lowering this number. Increasing it might make imports faster.', // @translate
             ],
             'attributes' => [
                 'id' => 'limit',
@@ -92,7 +92,7 @@ class CKANForm extends Form
             'type' => 'checkbox',
             'options' => [
                 'label' => 'Import files into Omeka S', // @translate
-                'info' => 'If checked, all data files associated with a record will be imported into Omeka S', // @translate
+                'info' => 'If checked, all data files associated with a record will be imported into Omeka S.', // @translate
             ],
             'attributes' => [
                 'id' => 'ingest-files',
@@ -104,7 +104,7 @@ class CKANForm extends Form
             'type' => 'textarea',
             'options' => [
                 'label' => 'Comment', // @translate
-                'info' => 'A note about the purpose or source of this import', // @translate
+                'info' => 'A note about the purpose or source of this import.', // @translate
             ],
             'attributes' => [
                 'id' => 'comment',
