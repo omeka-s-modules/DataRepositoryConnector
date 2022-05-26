@@ -32,6 +32,7 @@ class Import extends AbstractJob
 
         $this->api = $this->getServiceLocator()->get('Omeka\ApiManager');
         $this->client = $this->getServiceLocator()->get('Omeka\HttpClient');
+        $this->client->setOptions(['timeout' => 120]);
         $dataRepoImportJson = [
                             'o:job' => ['o:id' => $this->job->getId()],
                             'comment' => $comment,
