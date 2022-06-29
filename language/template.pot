@@ -1,0 +1,239 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-29 11:04-0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: Module.php:71
+msgid "Last Modified"
+msgstr ""
+
+#: Module.php:72
+msgid "Link"
+msgstr ""
+
+#: view/data-repository-connector/index/ckan-import.phtml:5
+#: view/data-repository-connector/index/dataverse-import.phtml:5
+#: view/data-repository-connector/index/past-imports.phtml:6
+#: view/data-repository-connector/index/zenodo-import.phtml:5
+msgid "Data Repository Connector"
+msgstr ""
+
+#: view/data-repository-connector/index/ckan-import.phtml:5
+msgid "CKAN Import"
+msgstr ""
+
+#: view/data-repository-connector/index/dataverse-import.phtml:5
+msgid "Dataverse Import"
+msgstr ""
+
+#: view/data-repository-connector/index/past-imports.phtml:6
+msgid "Past Imports"
+msgstr ""
+
+#: view/data-repository-connector/index/past-imports.phtml:19
+msgid "Undo?"
+msgstr ""
+
+#: view/data-repository-connector/index/past-imports.phtml:20
+msgid "Job ID"
+msgstr ""
+
+#: view/data-repository-connector/index/past-imports.phtml:21
+msgid "Container"
+msgstr ""
+
+#: view/data-repository-connector/index/past-imports.phtml:34
+msgid "Undo job"
+msgstr ""
+
+#: view/data-repository-connector/index/past-imports.phtml:45
+msgid "Added: "
+msgstr ""
+
+#: view/data-repository-connector/index/past-imports.phtml:46
+msgid "Updated: "
+msgstr ""
+
+#: view/data-repository-connector/index/past-imports.phtml:51
+msgid "Undone: "
+msgstr ""
+
+#: view/data-repository-connector/index/zenodo-import.phtml:5
+msgid "Zenodo Import"
+msgstr ""
+
+#: config/module.config.php:125 src/DataRepoSelector/Dataverse.php:38
+msgid "Dataverse"
+msgstr ""
+
+#: config/module.config.php:131 src/DataRepoSelector/Zenodo.php:38
+msgid "Zenodo"
+msgstr ""
+
+#: config/module.config.php:137 src/DataRepoSelector/CKAN.php:38
+msgid "CKAN"
+msgstr ""
+
+#: src/Form/ZenodoForm.php:53
+msgid "Zenodo Community ID"
+msgstr ""
+
+#: src/Form/ZenodoForm.php:54
+msgid ""
+"Short string identifying which Zenodo community to import from. Found in URL "
+"after https://zenodo.org/communities/ and before any search parameters. "
+"Example: lory_hslu"
+msgstr ""
+
+#: src/Form/ZenodoForm.php:66 src/Form/DataverseForm.php:70
+msgid "Metadata format"
+msgstr ""
+
+#: src/Form/ZenodoForm.php:67
+msgid ""
+"Select the metadata format to export from Zenodo. NOTE: Ensure the format "
+"exists as a vocabulary in your Omeka instance."
+msgstr ""
+
+#: src/Form/ZenodoForm.php:84
+msgid ""
+"The maximum number of results to retrieve at once from Zenodo community. If "
+"you notice errors or missing data, try lowering this number. Increasing it "
+"might make imports faster."
+msgstr ""
+
+#: src/Form/ZenodoForm.php:97 src/Form/CKANForm.php:94
+#: src/Form/DataverseForm.php:103
+msgid "Import files into Omeka S"
+msgstr ""
+
+#: src/Form/ZenodoForm.php:98 src/Form/CKANForm.php:95
+#: src/Form/DataverseForm.php:104
+msgid ""
+"If checked, all data files associated with a record will be imported into "
+"Omeka S."
+msgstr ""
+
+#: src/Form/ZenodoForm.php:110 src/Form/CKANForm.php:107
+#: src/Form/DataverseForm.php:116
+msgid "A note about the purpose or source of this import."
+msgstr ""
+
+#: src/Form/ZenodoForm.php:122 src/Form/CKANForm.php:119
+#: src/Form/DataverseForm.php:128
+msgid "Select item set(s)"
+msgstr ""
+
+#: src/Form/ZenodoForm.php:128 src/Form/CKANForm.php:125
+#: src/Form/DataverseForm.php:134
+msgid "Optional. Import items into item set(s)."
+msgstr ""
+
+#: src/Form/ZenodoForm.php:152 src/Form/CKANForm.php:149
+#: src/Form/DataverseForm.php:158
+msgid "Select site(s)"
+msgstr ""
+
+#: src/Form/ZenodoForm.php:158 src/Form/CKANForm.php:155
+#: src/Form/DataverseForm.php:164
+msgid "Optional. Import items into site(s)."
+msgstr ""
+
+#: src/Form/CKANForm.php:54
+msgid "Main CKAN URL"
+msgstr ""
+
+#: src/Form/CKANForm.php:55
+msgid ""
+"URL of the main CKAN site. Example: <a target=\"_blank\" href=\"https://data."
+"gov\">https://data.gov</a>"
+msgstr ""
+
+#: src/Form/CKANForm.php:68
+msgid "CKAN Organization"
+msgstr ""
+
+#: src/Form/CKANForm.php:69
+msgid ""
+"The identifier of the CKAN organization to import from. Example: city-of-new-"
+"york. If organization field is blank, all datasets under Main CKAN URL above "
+"will be imported."
+msgstr ""
+
+#: src/Form/CKANForm.php:81
+msgid ""
+"The maximum number of results to retrieve at once from CKAN instance. If you "
+"notice errors or missing data, try lowering this number. Increasing it might "
+"make imports faster."
+msgstr ""
+
+#: src/Form/DataverseForm.php:44
+msgid "Main Dataverse URL"
+msgstr ""
+
+#: src/Form/DataverseForm.php:45
+msgid ""
+"URL of the main Dataverse site. Example: <a target=\"_blank\" href=\"https://"
+"dataverse.harvard.edu\">https://dataverse.harvard.edu</a>"
+msgstr ""
+
+#: src/Form/DataverseForm.php:58
+msgid "Dataverse Identifier"
+msgstr ""
+
+#: src/Form/DataverseForm.php:59
+msgid ""
+"The identifier of the Dataverse to import from. If blank, all datasets under "
+"Main Dataverse URL above will be imported."
+msgstr ""
+
+#: src/Form/DataverseForm.php:71
+msgid ""
+"Select the metadata format to export from Dataverse. NOTE: Ensure the format "
+"exists as a vocabulary in your Omeka instance."
+msgstr ""
+
+#: src/Form/DataverseForm.php:90
+msgid ""
+"The maximum number of results to retrieve at once from Dataverse. If you "
+"notice errors or missing data, try lowering this number. Increasing it might "
+"make imports faster."
+msgstr ""
+
+#: src/Controller/IndexController.php:25
+msgid "There was a problem connecting to the Dataverse"
+msgstr ""
+
+#: src/Controller/IndexController.php:31 src/Controller/IndexController.php:56
+#: src/Controller/IndexController.php:81
+#, php-format
+msgid "Importing in Job ID %s"
+msgstr ""
+
+#: src/Controller/IndexController.php:37 src/Controller/IndexController.php:62
+#: src/Controller/IndexController.php:87
+msgid "There was an error during validation"
+msgstr ""
+
+#: src/Controller/IndexController.php:104
+#, php-format
+msgid "Undo in progress in the following jobs: %s"
+msgstr ""
+
+#: src/Controller/IndexController.php:108
+msgid "Error: no jobs selected to undo"
+msgstr ""
