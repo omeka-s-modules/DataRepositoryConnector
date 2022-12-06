@@ -1,0 +1,271 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+# Translators:
+# Giorgio Comai <g@giorgiocomai.eu>, 2022
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-29 11:04-0700\n"
+"PO-Revision-Date: 2022-06-29 18:08+0000\n"
+"Last-Translator: Giorgio Comai <g@giorgiocomai.eu>, 2022\n"
+"Language-Team: Italian (https://www.transifex.com/omeka/teams/14184/it/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#: Module.php:71
+msgid "Last Modified"
+msgstr "Ultima modifica"
+
+#: Module.php:72
+msgid "Link"
+msgstr "Collegamento"
+
+#: view/data-repository-connector/index/ckan-import.phtml:5
+#: view/data-repository-connector/index/dataverse-import.phtml:5
+#: view/data-repository-connector/index/past-imports.phtml:6
+#: view/data-repository-connector/index/zenodo-import.phtml:5
+msgid "Data Repository Connector"
+msgstr "Connettore al data repository"
+
+#: view/data-repository-connector/index/ckan-import.phtml:5
+msgid "CKAN Import"
+msgstr "Importazione CKAN"
+
+#: view/data-repository-connector/index/dataverse-import.phtml:5
+msgid "Dataverse Import"
+msgstr "Importazione Dataverse"
+
+#: view/data-repository-connector/index/past-imports.phtml:6
+msgid "Past Imports"
+msgstr "Precedenti importazioni"
+
+#: view/data-repository-connector/index/past-imports.phtml:19
+msgid "Undo?"
+msgstr "Annulla?"
+
+#: view/data-repository-connector/index/past-imports.phtml:20
+msgid "Job ID"
+msgstr "ID dell'operazione"
+
+#: view/data-repository-connector/index/past-imports.phtml:21
+msgid "Container"
+msgstr "Contenitore"
+
+#: view/data-repository-connector/index/past-imports.phtml:34
+msgid "Undo job"
+msgstr "Annulla operazione"
+
+#: view/data-repository-connector/index/past-imports.phtml:45
+msgid "Added: "
+msgstr "Aggiunto:"
+
+#: view/data-repository-connector/index/past-imports.phtml:46
+msgid "Updated: "
+msgstr "Aggiornato:"
+
+#: view/data-repository-connector/index/past-imports.phtml:51
+msgid "Undone: "
+msgstr "Annullato:"
+
+#: view/data-repository-connector/index/zenodo-import.phtml:5
+msgid "Zenodo Import"
+msgstr "Importazione Zenodo"
+
+#: config/module.config.php:125 src/DataRepoSelector/Dataverse.php:38
+msgid "Dataverse"
+msgstr "Dataverse"
+
+#: config/module.config.php:131 src/DataRepoSelector/Zenodo.php:38
+msgid "Zenodo"
+msgstr "Zenodo"
+
+#: config/module.config.php:137 src/DataRepoSelector/CKAN.php:38
+msgid "CKAN"
+msgstr "CKAN"
+
+#: src/Form/ZenodoForm.php:53
+msgid "Zenodo Community ID"
+msgstr "Zenodo Community ID"
+
+#: src/Form/ZenodoForm.php:54
+msgid ""
+"Short string identifying which Zenodo community to import from. Found in URL"
+" after https://zenodo.org/communities/ and before any search parameters. "
+"Example: lory_hslu"
+msgstr ""
+"Breve stringa identificativa di quale comunità di Zenodo è la fonte per "
+"l'importazione. Si trova nell'indirizzo URL dopo "
+"https://zenodo.org/communities/ e prima di eventuali parametri di ricerca. "
+"Esempio: lory_hslu"
+
+#: src/Form/ZenodoForm.php:66 src/Form/DataverseForm.php:70
+msgid "Metadata format"
+msgstr "Formato dei metadata"
+
+#: src/Form/ZenodoForm.php:67
+msgid ""
+"Select the metadata format to export from Zenodo. NOTE: Ensure the format "
+"exists as a vocabulary in your Omeka instance."
+msgstr ""
+"Seleziona il formato di metadata da esportare da Zenodo. N.B. Assicurati che"
+" il formato esista come vocabolario nella tua istanza di Omeka"
+
+#: src/Form/ZenodoForm.php:84
+msgid ""
+"The maximum number of results to retrieve at once from Zenodo community. If "
+"you notice errors or missing data, try lowering this number. Increasing it "
+"might make imports faster."
+msgstr ""
+"Massimo numero di risultati da importare da una comunità Zenodo in una "
+"singola richiesta. Se noti errori o dati mancanti, prova a ridurre questo "
+"numero. Alzare questo numero può rendere l'importazione più veloce."
+
+#: src/Form/ZenodoForm.php:97 src/Form/CKANForm.php:94
+#: src/Form/DataverseForm.php:103
+msgid "Import files into Omeka S"
+msgstr "Importa file in Omeka S"
+
+#: src/Form/ZenodoForm.php:98 src/Form/CKANForm.php:95
+#: src/Form/DataverseForm.php:104
+msgid ""
+"If checked, all data files associated with a record will be imported into "
+"Omeka S."
+msgstr ""
+"Se selezionati, tutti i file di dati associati con un contenuto verranno "
+"importati in Omeka S"
+
+#: src/Form/ZenodoForm.php:110 src/Form/CKANForm.php:107
+#: src/Form/DataverseForm.php:116
+msgid "A note about the purpose or source of this import."
+msgstr "Una nota riguardo allo scopo o alla fonte di questa importazione"
+
+#: src/Form/ZenodoForm.php:122 src/Form/CKANForm.php:119
+#: src/Form/DataverseForm.php:128
+msgid "Select item set(s)"
+msgstr "Seleziona collezioni"
+
+#: src/Form/ZenodoForm.php:128 src/Form/CKANForm.php:125
+#: src/Form/DataverseForm.php:134
+msgid "Optional. Import items into item set(s)."
+msgstr "Opzionale. Importa contenuti in collezioni."
+
+#: src/Form/ZenodoForm.php:152 src/Form/CKANForm.php:149
+#: src/Form/DataverseForm.php:158
+msgid "Select site(s)"
+msgstr "Seleziona siti"
+
+#: src/Form/ZenodoForm.php:158 src/Form/CKANForm.php:155
+#: src/Form/DataverseForm.php:164
+msgid "Optional. Import items into site(s)."
+msgstr "Opzionale. Importa contenuti in siti."
+
+#: src/Form/CKANForm.php:54
+msgid "Main CKAN URL"
+msgstr "URL CKAN principale"
+
+#: src/Form/CKANForm.php:55
+msgid ""
+"URL of the main CKAN site. Example: <a target=\"_blank\" "
+"href=\"https://data.gov\">https://data.gov</a>"
+msgstr ""
+"URL del sito CKAN principale. Esempio: <a target=\"_blank\" "
+"href=\"https://data.gov\">https://data.gov</a>"
+
+#: src/Form/CKANForm.php:68
+msgid "CKAN Organization"
+msgstr "Organizzazione CKAN"
+
+#: src/Form/CKANForm.php:69
+msgid ""
+"The identifier of the CKAN organization to import from. Example: city-of-"
+"new-york. If organization field is blank, all datasets under Main CKAN URL "
+"above will be imported."
+msgstr ""
+"L'identificativo dell'organizzazione CKAN da cui importare. Esempio: city-"
+"of-new-york. Se il campo organizzazione è lasciato vuoi, tutti i dataset "
+"sotto l'URL CKAN principale verranno importati."
+
+#: src/Form/CKANForm.php:81
+msgid ""
+"The maximum number of results to retrieve at once from CKAN instance. If you"
+" notice errors or missing data, try lowering this number. Increasing it "
+"might make imports faster."
+msgstr ""
+"Massimo numero di risultati da importare da un'istanza CKAN in una singola "
+"richiesta. Se noti errori o dati mancanti, prova a ridurre questo numero. "
+"Alzare questo numero può rendere l'importazione più veloci."
+
+#: src/Form/DataverseForm.php:44
+msgid "Main Dataverse URL"
+msgstr "URL Dataverse principale"
+
+#: src/Form/DataverseForm.php:45
+msgid ""
+"URL of the main Dataverse site. Example: <a target=\"_blank\" "
+"href=\"https://dataverse.harvard.edu\">https://dataverse.harvard.edu</a>"
+msgstr ""
+"URL del sito Dataverse principale. Esempio: <a target=\"_blank\" "
+"href=\"https://dataverse.harvard.edu\">https://dataverse.harvard.edu</a>"
+
+#: src/Form/DataverseForm.php:58
+msgid "Dataverse Identifier"
+msgstr "Identificativo Dataverse"
+
+#: src/Form/DataverseForm.php:59
+msgid ""
+"The identifier of the Dataverse to import from. If blank, all datasets under"
+" Main Dataverse URL above will be imported."
+msgstr ""
+"Identificativo del Dataverse da cui effettuare l'importazione. Se lasciato "
+"vuoto, tutti i dataset sotto l'URL Dataverse principale verranno importati."
+
+#: src/Form/DataverseForm.php:71
+msgid ""
+"Select the metadata format to export from Dataverse. NOTE: Ensure the format"
+" exists as a vocabulary in your Omeka instance."
+msgstr ""
+"Seleziona il formato di metadata da esportare dal Dataverse. N.B. Assicurati"
+" che il formato esista come vocabolario nella tua istanza di Omeka"
+
+#: src/Form/DataverseForm.php:90
+msgid ""
+"The maximum number of results to retrieve at once from Dataverse. If you "
+"notice errors or missing data, try lowering this number. Increasing it might"
+" make imports faster."
+msgstr ""
+"Massimo numero di risultati da importare dal Dataverse in una singola "
+"richiesta. Se noti errori o dati mancanti, prova a ridurre questo numero. "
+"Alzare questo numero può rendere l'importazione più veloce."
+
+#: src/Controller/IndexController.php:25
+msgid "There was a problem connecting to the Dataverse"
+msgstr "C'è stato un problema cercando di connettersi al Dataverse"
+
+#: src/Controller/IndexController.php:31 src/Controller/IndexController.php:56
+#: src/Controller/IndexController.php:81
+#, php-format
+msgid "Importing in Job ID %s"
+msgstr "Importazione in corso in operazione con ID %s"
+
+#: src/Controller/IndexController.php:37 src/Controller/IndexController.php:62
+#: src/Controller/IndexController.php:87
+msgid "There was an error during validation"
+msgstr "C'è stato un errore durante al validazione"
+
+#: src/Controller/IndexController.php:104
+#, php-format
+msgid "Undo in progress in the following jobs: %s"
+msgstr "Annullamento in corso nelle seguenti operazioni: %s"
+
+#: src/Controller/IndexController.php:108
+msgid "Error: no jobs selected to undo"
+msgstr "Errore: nessuna operazione è stata selezionata per essere annullata"
