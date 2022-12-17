@@ -19,6 +19,7 @@ return [
         'factories' => [
             'dataverse' => DataRepositoryConnector\Service\DataRepoSelector\DataverseFactory::class,
             'zenodo' => DataRepositoryConnector\Service\DataRepoSelector\ZenodoFactory::class,
+            'invenio' => DataRepositoryConnector\Service\DataRepoSelector\InvenioFactory::class,
             'ckan' => DataRepositoryConnector\Service\DataRepoSelector\CKANFactory::class,
         ],
     ],
@@ -50,6 +51,7 @@ return [
         'factories' => [
             'DataRepositoryConnector\Form\DataverseForm' => 'DataRepositoryConnector\Service\Form\DataverseFormFactory',
             'DataRepositoryConnector\Form\ZenodoForm' => 'DataRepositoryConnector\Service\Form\ZenodoFormFactory',
+            'DataRepositoryConnector\Form\InvenioForm' => 'DataRepositoryConnector\Service\Form\InvenioFormFactory',
             'DataRepositoryConnector\Form\CKANForm' => 'DataRepositoryConnector\Service\Form\CKANFormFactory',
         ],
     ],
@@ -83,6 +85,17 @@ return [
                                         '__NAMESPACE__' => 'DataRepositoryConnector\Controller',
                                         'controller' => 'Index',
                                         'action' => 'zenodo-import',
+                                    ],
+                                ],
+                            ],
+                            'invenio-import' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/invenio-import',
+                                    'defaults' => [
+                                        '__NAMESPACE__' => 'DataRepositoryConnector\Controller',
+                                        'controller' => 'Index',
+                                        'action' => 'invenio-import',
                                     ],
                                 ],
                             ],
@@ -130,6 +143,12 @@ return [
                     [
                         'label' => 'Zenodo', // @translate
                         'route' => 'admin/data-repository-connector/zenodo-import',
+                        'controller' => 'Index',
+                        'resource' => 'DataRepositoryConnector\Controller\Index',
+                    ],
+                    [
+                        'label' => 'Invenio', // @translate
+                        'route' => 'admin/data-repository-connector/invenio-import',
                         'controller' => 'Index',
                         'resource' => 'DataRepositoryConnector\Controller\Index',
                     ],

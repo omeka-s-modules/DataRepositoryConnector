@@ -3,6 +3,7 @@ namespace DataRepositoryConnector\Controller;
 
 use DataRepositoryConnector\Form\DataverseForm;
 use DataRepositoryConnector\Form\ZenodoForm;
+use DataRepositoryConnector\Form\InvenioForm;
 use DataRepositoryConnector\Form\CKANForm;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
@@ -45,6 +46,31 @@ class IndexController extends AbstractActionController
     {
         $view = new ViewModel;
         $form = $this->getForm(ZenodoForm::class);
+        $view->setVariable('form', $form);
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $job = $this->jobDispatcher()->dispatch('DataRepositoryConnector\Job\Import', $data);
+                //the DataRepoImport record is created in the job, so it doesn't
+                //happen until the job is done
+                $message = new Message('Importing in Job ID %s', // @translate
+                                        $job->getId());
+                $this->messenger()->addSuccess($message);
+                $view->setVariable('job', $job);
+                return $this->redirect()->toRoute('admin/data-repository-connector/past-imports');
+            } else {
+                $this->messenger()->addError('There was an error during validation'); // @translate
+            }
+        }
+
+        return $view;
+    }
+    
+    public function invenioImportAction()
+    {
+        $view = new ViewModel;
+        $form = $this->getForm(InvenioForm::class);
         $view->setVariable('form', $form);
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();

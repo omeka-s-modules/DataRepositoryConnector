@@ -41,7 +41,6 @@ class Import extends AbstractJob
                           ];
         $response = $this->api->create('data_repo_imports', $dataRepoImportJson);
         $importRecordId = $response->getContent()->id();
-
         $this->addedCount = 0;
         $this->updatedCount = 0;
         $this->itemSetArray = $this->getArg('itemSets', false);
@@ -65,7 +64,6 @@ class Import extends AbstractJob
         $hasNext = true;
         // Prepare metadata fields for given service export format
         $this->dataRepoService->preparefieldIdMap($this->getArg('data_md_format'));
-
         while ($hasNext) {
             $collectionResponse = $this->dataRepoService->getResponse($this->siteUri, $this->getArg('limit'), $this->getArg('collection_id'), $offset);
             if ($collectionResponse) {
@@ -80,6 +78,12 @@ class Import extends AbstractJob
                 $toUpdate = [];
 
                 foreach ($collectionResponse as $index => $itemData) {
+
+                    // If no id value, do not import record
+                    if (!isset($itemData['id'])) {
+                        continue;
+                    }
+
                     $resourceJson = $this->dataRepoService->buildResource($this->siteUri, $this->getArg('data_md_format'), $this->getArg('ingest_files'), $itemData);
 
                     // Assign sets & sites to item
