@@ -79,7 +79,7 @@ class InvenioForm extends Form
             'type' => 'text',
             'options' => [
                 'label' => 'Limit', // @translate
-                'info' => 'The maximum number of results to retrieve at once from Zenodo community. If you notice errors or missing data, try lowering this number. Increasing it might make imports faster.', // @translate
+                'info' => 'The maximum number of results to retrieve at once from Invenio instance. If you notice errors or missing data, try lowering this number. Increasing it might make imports faster.', // @translate
             ],
             'attributes' => [
                 'id' => 'limit',
