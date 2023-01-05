@@ -1,11 +1,12 @@
 <?php
-$this->htmlElement('body')->appendAttribute('class', 'data repository jobs undo');
 $escape = $this->plugin('escapeHtml');
 ?>
 
 <?php echo $this->pageTitle($this->translate('Data Repository Connector'), 1, $this->translate('Past Imports')); ?>
 <?php if(empty($imports)): ?>
-
+<div class="no-resources">
+    <p><?php echo $this->translate('There are no past imports.'); ?></p>
+</div>
 <?php else: ?>
 <?php echo $this->pagination(); ?>
 
@@ -18,7 +19,7 @@ $escape = $this->plugin('escapeHtml');
             <tr>
                 <th><?php echo $escape($this->translate('Undo?'));?></th>
                 <th><?php echo $this->sortLink($this->translate('Job ID'), 'id');?></th>
-                <th><?php echo $escape($this->translate('Container'));?></th>
+                <th><?php echo $escape($this->translate('Data repository link'));?></th>
                 <th><?php echo $escape($this->translate('Comment'));?></th>
                 <th><?php echo $escape($this->translate('Items'));?></th>
                 <th><?php echo $escape($this->translate('Date'));?></th>
@@ -35,7 +36,7 @@ $escape = $this->plugin('escapeHtml');
             <td><?php echo $job->link($job->id()); ?></td>
             <td>
                 <?php $args = $job->args();
-                // echo $this->hyperlink('link', $args['api_url'] . $args['collection_link']);
+                echo $this->hyperlink('link', $args['main_uri']);
                 ?>
             </td>
             <td>
