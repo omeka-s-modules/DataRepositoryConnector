@@ -80,7 +80,7 @@ class Import extends AbstractJob
                 foreach ($collectionResponse as $index => $itemData) {
 
                     // If no id value, do not import record
-                    if (!isset($itemData['id'])) {
+                    if (!isset($itemData['id']) && !isset($itemData['global_id'])) {
                         continue;
                     }
 
