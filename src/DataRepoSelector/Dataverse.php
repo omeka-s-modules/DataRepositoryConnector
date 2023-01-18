@@ -100,6 +100,11 @@ class Dataverse implements DataRepoSelectorInterface
         $itemJson = [];
         $this->siteUri = $siteUri;
 
+        // If no global_id value, do not import record
+        if (!isset($itemData['global_id'])) {
+            return;
+        }
+
         $export = $this->siteUri . '/api/datasets/export';
         $this->client->setUri($export);
         $this->client->setParameterGet(['exporter' => $dataMetadataFormat,

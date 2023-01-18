@@ -95,6 +95,11 @@ class Invenio implements DataRepoSelectorInterface
         $itemJson = [];
         $this->siteUri = $siteUri;
 
+        // If no id value, do not import record
+        if (!isset($itemData['id'])) {
+            return;
+        }
+
         $export = $this->siteUri . '/api/records/' . $itemData['id'];
         $this->client->setUri($export);
 

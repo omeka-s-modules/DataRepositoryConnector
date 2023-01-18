@@ -79,12 +79,11 @@ class Import extends AbstractJob
 
                 foreach ($collectionResponse as $index => $itemData) {
 
-                    // If no id value, do not import record
-                    if (!isset($itemData['id']) && !isset($itemData['global_id'])) {
+                    $resourceJson = $this->dataRepoService->buildResource($this->siteUri, $this->getArg('data_md_format'), $this->getArg('ingest_files'), $itemData);
+
+                    if (empty($resourceJson)) {
                         continue;
                     }
-
-                    $resourceJson = $this->dataRepoService->buildResource($this->siteUri, $this->getArg('data_md_format'), $this->getArg('ingest_files'), $itemData);
 
                     // Assign sets & sites to item
                     if ($this->itemSetArray) {

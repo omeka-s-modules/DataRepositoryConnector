@@ -91,6 +91,11 @@ class CKAN implements DataRepoSelectorInterface
         $itemJson = [];
         $this->siteUri = $siteUri;
 
+        // If no id value, do not import record
+        if (!isset($itemData['id'])) {
+            return;
+        }
+
         // Build URI for individual dataset
         $this->dataUri = $this->siteUri . '/dataset/' . $itemData['id'];
         // Add RDF suffix
