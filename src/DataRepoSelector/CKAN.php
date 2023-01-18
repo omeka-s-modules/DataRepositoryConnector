@@ -97,9 +97,12 @@ class CKAN implements DataRepoSelectorInterface
         $this->client->setUri($this->dataUri . '.rdf');
 
         $response = $this->client->send();
-        if ($response) {
-            $itemJson = $this->processItemMetadata($response, $itemJson);
+        if (!$response->isSuccess()) {
+            throw new Exception\RuntimeException(sprintf(
+                'Requested "%s" got "%s".', $this->dataUri . '.rdf', $response->renderStatusLine()
+            ));
         }
+        $itemJson = $this->processItemMetadata($response, $itemJson);
         
         if ($ingestFiles) {
             $itemJson = $this->processItemFiles($itemData, $itemJson);

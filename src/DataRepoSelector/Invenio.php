@@ -99,9 +99,12 @@ class Invenio implements DataRepoSelectorInterface
         $this->client->setUri($export);
 
         $response = $this->client->send();
-        if ($response) {
-            $itemJson = $this->processItemMetadata($response, $itemJson);
+        if (!$response->isSuccess()) {
+            throw new Exception\RuntimeException(sprintf(
+                'Requested "%s" got "%s".', $export, $response->renderStatusLine()
+            ));
         }
+        $itemJson = $this->processItemMetadata($response, $itemJson);
         
         if ($ingestFiles) {
             $itemJson = $this->processItemFiles($itemData, $itemJson);

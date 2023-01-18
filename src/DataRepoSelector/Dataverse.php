@@ -106,9 +106,12 @@ class Dataverse implements DataRepoSelectorInterface
                                         'persistentId' => $itemData['global_id'],
                                        ]);
         $response = $this->client->send();
-        if ($response) {
-            $itemJson = $this->processItemMetadata($response, $itemJson);
+        if (!$response->isSuccess()) {
+            throw new Exception\RuntimeException(sprintf(
+                'Requested "%s" with id "%s" got "%s".', $export, $itemData['global_id'], $response->renderStatusLine()
+            ));
         }
+        $itemJson = $this->processItemMetadata($response, $itemJson);
         
         if ($ingestFiles) {
             $itemJson = $this->processItemFiles($itemData, $itemJson);
