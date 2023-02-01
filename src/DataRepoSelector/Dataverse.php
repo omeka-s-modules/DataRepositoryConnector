@@ -67,6 +67,11 @@ class Dataverse implements DataRepoSelectorInterface
         }
     }
 
+    public function buildCollectionLink($link, $localId = null)
+    {
+        return $link . '/dataverse/' . $localId;
+    }
+
     public function getResponse($link, $limit, $localId = null, $offset = 0)
     {
         $responseArray = [];

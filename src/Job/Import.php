@@ -30,6 +30,13 @@ class Import extends AbstractJob
         $dataRepoSelectedService = $this->getArg('data_repo_service');
         $this->dataRepoService = $dataRepoSelector->get($dataRepoSelectedService);
 
+        $this->siteUri = rtrim($this->getArg('main_uri'), '/');
+        // Build collection URI & save to job args to link from past imports pages
+        $collectionLink = $this->dataRepoService->buildCollectionLink($this->siteUri, $this->getArg('collection_id'));
+        $jobArgs = $this->job->getArgs();
+        $jobArgs['collection_link'] = $collectionLink;
+        $this->job->setArgs($jobArgs);
+
         $this->api = $this->getServiceLocator()->get('Omeka\ApiManager');
         $this->client = $this->getServiceLocator()->get('Omeka\HttpClient');
         $this->client->setOptions(['timeout' => 120]);
@@ -45,8 +52,7 @@ class Import extends AbstractJob
         $this->updatedCount = 0;
         $this->itemSetArray = $this->getArg('itemSets', false);
         $this->itemSiteArray = $this->getArg('itemSites', false);
-        
-        $this->siteUri = rtrim($this->getArg('main_uri'), '/');
+
         $this->importCollection($this->siteUri);
 
         $dataRepoImportJson = [

@@ -60,6 +60,11 @@ class CKAN implements DataRepoSelectorInterface
         }
     }
 
+    public function buildCollectionLink($link, $localId = null)
+    {
+        return $link . '/dataset/?organization=' . $localId;
+    }
+
     public function getResponse($link, $limit, $localId = null, $offset = 0)
     {
         $responseArray = [];

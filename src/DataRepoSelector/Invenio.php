@@ -60,6 +60,11 @@ class Invenio implements DataRepoSelectorInterface
         }
     }
 
+    public function buildCollectionLink($link, $localId = null)
+    {
+        return $link . '/search?q=' . $localId;
+    }
+
     public function getResponse($link, $limit, $searchQuery = null, $offset = 0)
     {
         $responseArray = [];

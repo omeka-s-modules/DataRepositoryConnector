@@ -60,6 +60,11 @@ class Zenodo implements DataRepoSelectorInterface
         }
     }
 
+    public function buildCollectionLink($link, $localId = null)
+    {
+        return $link . '/communities/' . $localId;
+    }
+
     public function getResponse($link, $limit, $localId = null, $offset = 0)
     {
         $responseArray = [];
