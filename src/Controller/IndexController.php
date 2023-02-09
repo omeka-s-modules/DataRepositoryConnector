@@ -121,17 +121,26 @@ class IndexController extends AbstractActionController
     {
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
-            if (isset($data['jobs'])) {
+            if (isset($data['undoJobs'])) {
                 $undoJobIds = [];
-                foreach ($data['jobs'] as $jobId) {
+                foreach ($data['undoJobs'] as $jobId) {
                     $undoJob = $this->undoJob($jobId);
                     $undoJobIds[] = $undoJob->getId();
                 }
-                $message = new Message('Undo in progress in the following jobs: %s', // @translate
+                $message = new Message('Undo in progress on the following jobs: %s', // @translate
                     implode(', ', $undoJobIds));
                 $this->messenger()->addSuccess($message);
+            } else if (isset($data['rerunJobs'])) {
+                $rerunJobIds = [];
+                foreach ($data['rerunJobs'] as $jobId) {
+                    $rerunJob = $this->rerunJob($jobId);
+                    $rerunJobIds[] = $jobId;
+                }
+                $message = new Message('Rerun in progress on the following jobs: %s', // @translate
+                    implode(', ', $rerunJobIds));
+                $this->messenger()->addSuccess($message);
             } else {
-                $this->messenger()->addError('Error: no jobs selected to undo'); // @translate
+                $this->messenger()->addError('Error: no jobs selected'); // @translate
             }
         }
         $view = new ViewModel;
@@ -150,12 +159,28 @@ class IndexController extends AbstractActionController
     protected function undoJob($jobId)
     {
         $response = $this->api()->search('data_repo_imports', ['job_id' => $jobId]);
-        $fedoraImport = $response->getContent()[0];
+        $dataImport = $response->getContent()[0];
         $job = $this->jobDispatcher()->dispatch('DataRepositoryConnector\Job\Undo', ['jobId' => $jobId]);
         $response = $this->api()->update('data_repo_imports',
-                    $fedoraImport->id(),
+                    $dataImport->id(),
                     [
                         'o:undo_job' => ['o:id' => $job->getId() ],
+                    ]
+                );
+        return $job;
+    }
+
+    protected function rerunJob($jobId)
+    {
+        $response = $this->api()->search('data_repo_imports', ['job_id' => $jobId]);
+        $dataImport = $response->getContent()[0];
+        // Get original import job args to run again
+        $rerunData = $dataImport->job()->args();
+        $job = $this->jobDispatcher()->dispatch('DataRepositoryConnector\Job\Import', $rerunData);
+        $response = $this->api()->update('data_repo_imports',
+                    $dataImport->id(),
+                    [
+                        'o:rerun_job' => ['o:id' => $job->getId() ],
                     ]
                 );
         return $job;

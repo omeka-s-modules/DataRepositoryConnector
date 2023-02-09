@@ -39,6 +39,12 @@ class DataRepositoryImport extends AbstractEntity
     protected $undoJob;
 
     /**
+     * @OneToOne(targetEntity="Omeka\Entity\Job")
+     * @JoinColumn(nullable=true)
+     */
+    protected $rerunJob;
+
+    /**
      * @Column(type="string", nullable=true)
      */
     protected $comment;
@@ -66,6 +72,16 @@ class DataRepositoryImport extends AbstractEntity
     public function getUndoJob()
     {
         return $this->undoJob;
+    }
+
+    public function setRerunJob(Job $job)
+    {
+        $this->rerunJob = $job;
+    }
+
+    public function getRerunJob()
+    {
+        return $this->rerunJob;
     }
 
     public function setAddedCount($count)

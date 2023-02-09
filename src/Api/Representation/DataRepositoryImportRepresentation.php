@@ -13,6 +13,7 @@ class DataRepositoryImportRepresentation extends AbstractEntityRepresentation
             'comment' => $this->resource->getComment(),
             'o:job' => $this->getReference(),
             'o:undo_job' => $this->getReference(),
+            'o:rerun_job' => $this->getReference(),
         ];
     }
 
@@ -31,6 +32,12 @@ class DataRepositoryImportRepresentation extends AbstractEntityRepresentation
     {
         return $this->getAdapter('jobs')
             ->getRepresentation($this->resource->getUndoJob());
+    }
+
+    public function rerunJob()
+    {
+        return $this->getAdapter('jobs')
+            ->getRepresentation($this->resource->getRerunJob());
     }
 
     public function comment()
