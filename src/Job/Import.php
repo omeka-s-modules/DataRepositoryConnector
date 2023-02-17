@@ -77,7 +77,8 @@ class Import extends AbstractJob
                 $itemCount = $collectionResponse['item_count'];
                 $collectionResponse = $collectionResponse['collection_response'];
 
-                if ($offset >= $itemCount) {
+                // If no more results or test import checked, stop iterating
+                if ($offset >= $itemCount || $this->getArg('test_import')) {
                     $hasNext = false;
                 }
                 

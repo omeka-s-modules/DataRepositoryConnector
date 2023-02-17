@@ -91,8 +91,21 @@ class DataverseForm extends Form
             ],
             'attributes' => [
                 'id' => 'limit',
-                'required' => 'true',
+                'required' => true,
                 'value' => '100',
+            ],
+        ]);
+        
+        $this->add([
+            'name' => 'test_import',
+            'type' => 'checkbox',
+            'options' => [
+                'label' => 'Test import', // @translate
+                'info' => 'If checked, ONLY import the # of results indicated in Limit field above. Useful for testing and fine-tuning.', // @translate
+            ],
+            'attributes' => [
+                'id' => 'test-import',
+                'required' => false,
             ],
         ]);
 
