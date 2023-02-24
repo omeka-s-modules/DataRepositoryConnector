@@ -39,7 +39,11 @@ $escape = $this->plugin('escapeHtml');
             <td><?php echo $job->link($job->id()); ?></td>
             <td>
                 <?php $args = $job->args();
-                echo $this->hyperlink($args['data_repo_service'], $args['collection_link']);
+                if ($args['collection_link']) {
+                    echo $this->hyperlink($args['data_repo_service'], $args['collection_link']);
+                } else {
+                    echo $this->hyperlink($args['data_repo_service'], $args['main_uri']);
+                }
                 ?>
             </td>
             <td>
