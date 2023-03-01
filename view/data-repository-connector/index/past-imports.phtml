@@ -56,16 +56,14 @@ $escape = $this->plugin('escapeHtml');
             } else {
                 $linkID = $job->id();
             }
-            if ($import->addedCount() > 0 && !$undoJob) {
-                echo $this->hyperlink('Added: ' . $import->addedCount(), $this->url('admin/default', ['controller' => 'item', 'action' => 'browse'], ['query' => ['data_import_id' => $linkID]])) . ' ';
+            $totalCount = $import->addedCount() + $import->updatedCount();
+            if ($totalCount > 0) {
+                echo $this->hyperlink('Total: ' . $totalCount, $this->url('admin/default', ['controller' => 'item', 'action' => 'browse'], ['query' => ['data_import_id' => $linkID]])) . '<br>';
             } else {
-                echo 'Added: ' . $import->addedCount() . ' ';
+                echo 'Total: ' . $totalCount . '<br>';
             }
-            if ($import->updatedCount() > 0 && !$undoJob) {
-                echo $this->hyperlink('Updated: ' . $import->updatedCount(), $this->url('admin/default', ['controller' => 'item', 'action' => 'browse'], ['query' => ['data_import_id' => $linkID]]));
-            } else {
-                echo 'Updated: ' . $import->updatedCount();
-            }
+            echo 'Added: ' . $import->addedCount() . '<br>';
+            echo 'Updated: ' . $import->updatedCount();
             ?>
             </td>
             <td><?php echo $escape($this->i18n()->dateFormat($job->started())); ?></td>
