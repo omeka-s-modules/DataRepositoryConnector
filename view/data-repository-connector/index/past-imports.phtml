@@ -57,7 +57,9 @@ $escape = $this->plugin('escapeHtml');
                 $linkID = $job->id();
             }
             $totalCount = $import->addedCount() + $import->updatedCount();
-            if ($totalCount > 0) {
+            // Only link to search results for Job IDs with associated items
+            $totalResults = $this->api()->search('items', ['data_import_id' => $linkID]);
+            if ($totalResults->getTotalResults() > 0 && $totalCount > 0) {
                 echo $this->hyperlink('Total: ' . $totalCount, $this->url('admin/default', ['controller' => 'item', 'action' => 'browse'], ['query' => ['data_import_id' => $linkID]])) . '<br>';
             } else {
                 echo 'Total: ' . $totalCount . '<br>';
