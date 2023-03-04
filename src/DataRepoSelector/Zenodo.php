@@ -46,8 +46,8 @@ class Zenodo implements DataRepoSelectorInterface
         // Depending on export format, prepare metadata fields
         switch($this->dataMetadataFormat) {
             case 'oai_dc':
-                $this->prefix = 'dc';
-                $this->namespace = 'http://purl.org/dc/elements/1.1/';
+                $this->prefix = 'dcterms';
+                $this->namespace = 'http://purl.org/dc/terms/';
                 break;
         }
 
@@ -135,7 +135,7 @@ class Zenodo implements DataRepoSelectorInterface
         switch($this->dataMetadataFormat) {
             case 'oai_dc':
                 $itemMetadata = simplexml_load_string($response->getBody());
-                $itemMetadataArray = $itemMetadata->children($this->prefix, true);
+                $itemMetadataArray = $itemMetadata->children('dc', true);
                 break;
             case 'schema.org':
                 $itemMetadataArray = json_decode($response->getBody(), true);
