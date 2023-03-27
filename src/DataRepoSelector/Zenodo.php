@@ -114,6 +114,7 @@ class Zenodo implements DataRepoSelectorInterface
         }
 
         $response = $this->client->send();
+
         if (!$response->isSuccess()) {
             throw new Exception\RuntimeException(sprintf(
                 'Requested "%s" got "%s".', $export, $response->renderStatusLine()

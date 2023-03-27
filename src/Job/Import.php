@@ -10,6 +10,7 @@ use Omeka\Job\Exception;
 
 class Import extends AbstractJob
 {
+
     protected $client;
 
     protected $propertyUriIdMap;
@@ -26,6 +27,7 @@ class Import extends AbstractJob
 
     public function perform()
     {
+
         $dataRepoSelector = $this->getServiceLocator()->get('DataRepositoryConnector\DataRepoSelectorManager');
         $dataRepoSelectedService = $this->getArg('data_repo_service');
         $this->dataRepoService = $dataRepoSelector->get($dataRepoSelectedService);
@@ -87,7 +89,21 @@ class Import extends AbstractJob
 
                 foreach ($collectionResponse as $index => $itemData) {
 
-                    $resourceJson = $this->dataRepoService->buildResource($this->siteUri, $this->getArg('data_md_format'), $this->getArg('ingest_files'), $itemData);
+                    // Sleep and retry multiple times if API exception encountered
+                    // to get around TOO MANY REQUESTS and other server-side exceptions
+                    // for large collections
+                    $NUM_OF_ATTEMPTS = 5;
+                    $attempts = 0;
+                    do {
+                        try {
+                            $resourceJson = $this->dataRepoService->buildResource($this->siteUri, $this->getArg('data_md_format'), $this->getArg('ingest_files'), $itemData);
+                        } catch (\Exception $e) {
+                            $attempts++;
+                            sleep(60);
+                            continue;
+                        }
+                        break;
+                    } while($attempts < $NUM_OF_ATTEMPTS);
 
                     if (empty($resourceJson)) {
                         continue;
