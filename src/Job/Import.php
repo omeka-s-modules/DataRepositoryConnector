@@ -56,6 +56,7 @@ class Import extends AbstractJob
         $this->itemSetArray = $this->getArg('itemSets', false);
         $this->itemSiteArray = $this->getArg('itemSites', false);
 
+        $this->originalIdentityMap = $this->getServiceLocator()->get('Omeka\EntityManager')->getUnitOfWork()->getIdentityMap();
         $this->importCollection($this->siteUri);
 
         $dataRepoImportJson = [
@@ -91,7 +92,7 @@ class Import extends AbstractJob
 
                     // Sleep and retry multiple times if API exception encountered
                     // to get around TOO MANY REQUESTS and other server-side exceptions
-                    // for large collections
+                    // especially for larger collections
                     $NUM_OF_ATTEMPTS = 5;
                     $attempts = 0;
                     do {
@@ -126,15 +127,13 @@ class Import extends AbstractJob
                     $response = $this->api->search('data_repo_items', ['uri' => $resourceJson['dataUri']]);
                     $content = $response->getContent();
                     if (empty($content)) {
-                        $dataRepoItem = false;
-                        $omekaItem = false;
+                        $importRecord = false;
                     } else {
-                        $dataRepoItem = $content[0];
-                        $omekaItem = $dataRepoItem->item();
+                        $importRecord = $content[0];
                     }
                 
-                    if ($omekaItem) {
-                        $itemId = $omekaItem->id();
+                    if ($importRecord) {
+                        $itemId = $importRecord->item()->id();
                         // keep existing item sets/sites, add any new item sets/sites
                         $existingItem = $this->api->search('items', ['id' => $itemId])->getContent();
                 
@@ -145,30 +144,86 @@ class Import extends AbstractJob
                         $existingItemSites = array_keys($existingItem[0]->sites()) ?: [];
                         $newItemSites = $resourceJson['o:site'] ?: [];
                         $resourceJson['o:site'] = array_merge($existingItemSites, $newItemSites);
-                
-                        $response = $this->api->update('items', $omekaItem->id(), $resourceJson);
+
+                        $resourceJson['id'] = $itemId;
+                        $toUpdate[$importRecord->id()] = $resourceJson;
                     } else {
-                        $response = $this->api->create('items', $resourceJson);
-                        $itemId = $response->getContent()->id();
-                    }
-                
-                    $dataRepoItemJson = [
-                                'o:job' => ['o:id' => $this->job->getId()],
-                                'o:item' => ['o:id' => $itemId],
-                                'uri' => $resourceJson['dataUri'],
-                                'last_modified' => $resourceJson['dataLastModified'],
-                              ];
-                
-                    if ($dataRepoItem) {
-                        $response = $this->api->update('data_repo_items', $dataRepoItem->id(), $dataRepoItemJson);
-                        $this->updatedCount++;
-                    } else {
-                        $this->addedCount++;
-                        $response = $this->api->create('data_repo_items', $dataRepoItemJson);
+                        $toCreate["create" . $index] = $resourceJson;
                     }
                 }
+                $this->createItems($toCreate);
+                $this->updateItems($toUpdate);
 
                 $offset = $offset + $this->getArg('limit');
+            }
+        }
+    }
+
+    protected function createItems($toCreate)
+    {
+        $createResponse = $this->api->batchCreate('items', $toCreate, [], ['continueOnError' => true]);
+        $this->addedCount = $this->addedCount + count($createResponse->getContent());
+
+        $createImportRecordsJson = [];
+        $createContent = $createResponse->getContent();
+
+        foreach ($createContent as $id => $resourceReference) {
+            //get the original data used for individual item creation
+            $toCreateData = $toCreate[$id];
+
+            $dataRepoItemJson = [
+                            'o:job' => ['o:id' => $this->job->getId()],
+                            'o:item' => ['o:id' => $resourceReference->id()],
+                            'uri' => $toCreateData['dataUri'],
+                            'last_modified' => $toCreateData['dataLastModified'],
+                        ];
+            $createImportRecordsJson[] = $dataRepoItemJson;
+        }
+
+        $createImportRecordResponse = $this->api->batchCreate('data_repo_items', $createImportRecordsJson, [], ['continueOnError' => true]);
+    }
+
+    protected function updateItems($toUpdate)
+    {
+        //  batchUpdate would be nice, but complexities abound. See https://github.com/omeka/omeka-s/issues/326
+        $em = $this->getServiceLocator()->get('Omeka\EntityManager');
+        $updateResponses = [];
+        foreach ($toUpdate as $importRecordId => $itemJson) {
+            $this->updatedCount = $this->updatedCount + 1;
+            $updateResponses[$importRecordId] = $this->api->update('items', $itemJson['id'], $itemJson, [], ['flushEntityManager' => false]);
+        }
+
+        foreach ($updateResponses as $importRecordId => $resourceReference) {
+            $toUpdateData = $toUpdate[$importRecordId];
+            $dataRepoItemJson = [
+                            'o:job' => ['o:id' => $this->job->getId()],
+                            'uri' => $toUpdateData['dataUri'],
+                            'last_modified' => $toUpdateData['dataLastModified'],
+                        ];
+            $updateImportRecordResponse = $this->api->update('data_repo_items', $importRecordId, $dataRepoItemJson, [], ['flushEntityManager' => false]);
+        }
+        $em->flush();
+        $this->detachAllNewEntities($this->originalIdentityMap);
+    }
+
+    /**
+     * Given an old copy of the Doctrine identity map, reset
+     * the entity manager to that state by detaching all entities that
+     * did not exist in the prior state.
+     *
+     * @internal This is a copy-paste of the functionality from the abstract entity adapter
+     *
+     * @param array $oldIdentityMap
+     */
+    protected function detachAllNewEntities(array $oldIdentityMap)
+    {
+        $entityManager = $this->getServiceLocator()->get('Omeka\EntityManager');
+        $identityMap = $entityManager->getUnitOfWork()->getIdentityMap();
+        foreach ($identityMap as $entityClass => $entities) {
+            foreach ($entities as $idHash => $entity) {
+                if (!isset($oldIdentityMap[$entityClass][$idHash])) {
+                    $entityManager->detach($entity);
+                }
             }
         }
     }
