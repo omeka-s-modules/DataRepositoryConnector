@@ -190,7 +190,10 @@ class Import extends AbstractJob
         $updateResponses = [];
         foreach ($toUpdate as $importRecordId => $itemJson) {
             $this->updatedCount = $this->updatedCount + 1;
-            $updateResponses[$importRecordId] = $this->api->update('items', $itemJson['id'], $itemJson, [], ['flushEntityManager' => false]);
+            $updateResponses[$importRecordId] = $this->api->update('items', $itemJson['id'], $itemJson, [], [
+                'flushEntityManager' => false,
+                'continueOnError' => true
+            ]);
         }
 
         foreach ($updateResponses as $importRecordId => $resourceReference) {
@@ -200,7 +203,10 @@ class Import extends AbstractJob
                             'uri' => $toUpdateData['dataUri'],
                             'last_modified' => $toUpdateData['dataLastModified'],
                         ];
-            $updateImportRecordResponse = $this->api->update('data_repo_items', $importRecordId, $dataRepoItemJson, [], ['flushEntityManager' => false]);
+            $updateImportRecordResponse = $this->api->update('data_repo_items', $importRecordId, $dataRepoItemJson, [], [
+                'flushEntityManager' => false,
+                'continueOnError' => true
+            ]);
         }
         $em->flush();
         $this->detachAllNewEntities($this->originalIdentityMap);
