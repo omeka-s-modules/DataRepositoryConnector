@@ -10,7 +10,8 @@ use Omeka\Job\Exception;
 
 class Import extends AbstractJob
 {
-
+    protected $logger;
+    
     protected $client;
 
     protected $propertyUriIdMap;
@@ -27,7 +28,7 @@ class Import extends AbstractJob
 
     public function perform()
     {
-
+        $this->logger = $this->getServiceLocator()->get('Omeka\Logger');
         $dataRepoSelector = $this->getServiceLocator()->get('DataRepositoryConnector\DataRepoSelectorManager');
         $dataRepoSelectedService = $this->getArg('data_repo_service');
         $this->dataRepoService = $dataRepoSelector->get($dataRepoSelectedService);
@@ -190,10 +191,12 @@ class Import extends AbstractJob
         $updateResponses = [];
         foreach ($toUpdate as $importRecordId => $itemJson) {
             $this->updatedCount = $this->updatedCount + 1;
-            $updateResponses[$importRecordId] = $this->api->update('items', $itemJson['id'], $itemJson, [], [
-                'flushEntityManager' => false,
-                'continueOnError' => true
-            ]);
+            try {
+                $updateResponses[$importRecordId] = $this->api->update('items', $itemJson['id'], $itemJson, [], ['flushEntityManager' => false]);
+            } catch (ValidationException $e) {
+                $this->logger->err((string) $e);
+                continue;
+            }
         }
 
         foreach ($updateResponses as $importRecordId => $resourceReference) {
@@ -203,10 +206,7 @@ class Import extends AbstractJob
                             'uri' => $toUpdateData['dataUri'],
                             'last_modified' => $toUpdateData['dataLastModified'],
                         ];
-            $updateImportRecordResponse = $this->api->update('data_repo_items', $importRecordId, $dataRepoItemJson, [], [
-                'flushEntityManager' => false,
-                'continueOnError' => true
-            ]);
+            $updateImportRecordResponse = $this->api->update('data_repo_items', $importRecordId, $dataRepoItemJson, [], ['flushEntityManager' => false]);
         }
         $em->flush();
         $this->detachAllNewEntities($this->originalIdentityMap);
