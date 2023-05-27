@@ -78,6 +78,7 @@ class Zenodo implements DataRepoSelectorInterface
         $this->client->setParameterGet(['q' => 'communities:' . $localId,
                                         'size' => $limit,
                                         'page' => $this->page,
+                                        'sort' => 'mostrecent'
                                        ]);
         $collectionResponse = $this->client->send();
         if (!$collectionResponse->isSuccess()) {
