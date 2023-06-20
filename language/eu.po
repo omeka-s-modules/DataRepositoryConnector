@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Giorgio Comai <g@giorgiocomai.eu>, 2022
+# Iametza Interaktiboa, 2022
 # 
 #, fuzzy
 msgid ""
@@ -13,21 +13,21 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-20 15:06-0700\n"
 "PO-Revision-Date: 2022-06-29 18:08+0000\n"
-"Last-Translator: Giorgio Comai <g@giorgiocomai.eu>, 2022\n"
-"Language-Team: Italian (https://app.transifex.com/omeka/teams/14184/it/)\n"
+"Last-Translator: Iametza Interaktiboa, 2022\n"
+"Language-Team: Basque (https://app.transifex.com/omeka/teams/14184/eu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: it\n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+"Language: eu\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: Module.php:88
 msgid "Last Modified"
-msgstr "Ultima modifica"
+msgstr "Azkeneko Aldaketa"
 
 #: Module.php:89
 msgid "Link"
-msgstr "Collegamento"
+msgstr "Lotura"
 
 #: view/data-repository-connector/index/ckan-import.phtml:5
 #: view/data-repository-connector/index/dataverse-import.phtml:5
@@ -35,15 +35,15 @@ msgstr "Collegamento"
 #: view/data-repository-connector/index/past-imports.phtml:5
 #: view/data-repository-connector/index/zenodo-import.phtml:5
 msgid "Data Repository Connector"
-msgstr "Connettore al data repository"
+msgstr "Datu Biltegirako Konektorea"
 
 #: view/data-repository-connector/index/ckan-import.phtml:5
 msgid "CKAN Import"
-msgstr "Importazione CKAN"
+msgstr ""
 
 #: view/data-repository-connector/index/dataverse-import.phtml:5
 msgid "Dataverse Import"
-msgstr "Importazione Dataverse"
+msgstr ""
 
 #: view/data-repository-connector/index/invenio-import.phtml:5
 msgid "Invenio Import"
@@ -51,7 +51,7 @@ msgstr ""
 
 #: view/data-repository-connector/index/past-imports.phtml:5
 msgid "Past Imports"
-msgstr "Precedenti importazioni"
+msgstr "Aurreko Inportazioak"
 
 #: view/data-repository-connector/index/past-imports.phtml:8
 msgid "There are no past imports."
@@ -67,7 +67,7 @@ msgstr ""
 
 #: view/data-repository-connector/index/past-imports.phtml:22
 msgid "Job ID"
-msgstr "ID dell'operazione"
+msgstr "Lan IDa"
 
 #: view/data-repository-connector/index/past-imports.phtml:23
 msgid "Data repository link"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: view/data-repository-connector/index/past-imports.phtml:37
 msgid "Undo job"
-msgstr "Annulla operazione"
+msgstr "Desegin lana"
 
 #: view/data-repository-connector/index/past-imports.phtml:38
 msgid "Re-run job"
@@ -91,15 +91,15 @@ msgstr ""
 
 #: view/data-repository-connector/index/zenodo-import.phtml:5
 msgid "Zenodo Import"
-msgstr "Importazione Zenodo"
+msgstr ""
 
 #: config/module.config.php:138 src/DataRepoSelector/Dataverse.php:38
 msgid "Dataverse"
-msgstr "Dataverse"
+msgstr ""
 
 #: config/module.config.php:144 src/DataRepoSelector/Zenodo.php:38
 msgid "Zenodo"
-msgstr "Zenodo"
+msgstr ""
 
 #: config/module.config.php:150 src/DataRepoSelector/Invenio.php:38
 msgid "Invenio"
@@ -107,11 +107,11 @@ msgstr ""
 
 #: config/module.config.php:156 src/DataRepoSelector/CKAN.php:38
 msgid "CKAN"
-msgstr "CKAN"
+msgstr ""
 
 #: src/Form/ZenodoForm.php:53
 msgid "Zenodo Community ID"
-msgstr "Zenodo Community ID"
+msgstr ""
 
 #: src/Form/ZenodoForm.php:54
 msgid ""
@@ -119,22 +119,16 @@ msgid ""
 " after https://zenodo.org/communities/ and before any search parameters. "
 "Example: lory_hslu"
 msgstr ""
-"Breve stringa identificativa di quale comunità di Zenodo è la fonte per "
-"l'importazione. Si trova nell'indirizzo URL dopo "
-"https://zenodo.org/communities/ e prima di eventuali parametri di ricerca. "
-"Esempio: lory_hslu"
 
 #: src/Form/ZenodoForm.php:66 src/Form/DataverseForm.php:70
 msgid "Metadata format"
-msgstr "Formato dei metadata"
+msgstr "Metadatu formatua"
 
 #: src/Form/ZenodoForm.php:67
 msgid ""
 "Select the metadata format to export from Zenodo. NOTE: Ensure the format "
 "exists as a vocabulary in your Omeka instance."
 msgstr ""
-"Seleziona il formato di metadata da esportare da Zenodo. N.B. Assicurati che"
-" il formato esista come vocabolario nella tua istanza di Omeka"
 
 #: src/Form/ZenodoForm.php:84
 msgid ""
@@ -142,9 +136,6 @@ msgid ""
 "you notice errors or missing data, try lowering this number. Increasing it "
 "might make imports faster."
 msgstr ""
-"Massimo numero di risultati da importare da una comunità Zenodo in una "
-"singola richiesta. Se noti errori o dati mancanti, prova a ridurre questo "
-"numero. Alzare questo numero può rendere l'importazione più veloce."
 
 #: src/Form/ZenodoForm.php:97 src/Form/InvenioForm.php:95
 #: src/Form/CKANForm.php:94 src/Form/DataverseForm.php:103
@@ -161,7 +152,7 @@ msgstr ""
 #: src/Form/ZenodoForm.php:110 src/Form/InvenioForm.php:108
 #: src/Form/CKANForm.php:107 src/Form/DataverseForm.php:116
 msgid "Import files into Omeka S"
-msgstr "Importa file in Omeka S"
+msgstr "Inportatu fitxategiak Omeka S barnean"
 
 #: src/Form/ZenodoForm.php:111 src/Form/InvenioForm.php:109
 #: src/Form/CKANForm.php:108 src/Form/DataverseForm.php:117
@@ -169,33 +160,33 @@ msgid ""
 "If checked, all data files associated with a record will be imported into "
 "Omeka S."
 msgstr ""
-"Se selezionati, tutti i file di dati associati con un contenuto verranno "
-"importati in Omeka S"
+"Aukeratua badago, erregistroarekin lotutako datu fitxategi guztiak Omeka S "
+"barnean inportatuko dira."
 
 #: src/Form/ZenodoForm.php:123 src/Form/InvenioForm.php:121
 #: src/Form/CKANForm.php:120 src/Form/DataverseForm.php:129
 msgid "A note about the purpose or source of this import."
-msgstr "Una nota riguardo allo scopo o alla fonte di questa importazione"
+msgstr "Inportazioaren helburu edo jatorriaren inguruko oharra."
 
 #: src/Form/ZenodoForm.php:135 src/Form/InvenioForm.php:133
 #: src/Form/CKANForm.php:132 src/Form/DataverseForm.php:141
 msgid "Select item set(s)"
-msgstr "Seleziona collezioni"
+msgstr "Hautatu elementu multzoa(k)"
 
 #: src/Form/ZenodoForm.php:141 src/Form/InvenioForm.php:139
 #: src/Form/CKANForm.php:138 src/Form/DataverseForm.php:147
 msgid "Optional. Import items into item set(s)."
-msgstr "Opzionale. Importa contenuti in collezioni."
+msgstr "Aukerazkoa. Inportatu elementuak elementu multzoetan."
 
 #: src/Form/ZenodoForm.php:165 src/Form/InvenioForm.php:163
 #: src/Form/CKANForm.php:162 src/Form/DataverseForm.php:171
 msgid "Select site(s)"
-msgstr "Seleziona siti"
+msgstr "Hautatu ataria(k)"
 
 #: src/Form/ZenodoForm.php:171 src/Form/InvenioForm.php:169
 #: src/Form/CKANForm.php:168 src/Form/DataverseForm.php:177
 msgid "Optional. Import items into site(s)."
-msgstr "Opzionale. Importa contenuti in siti."
+msgstr "Hautazkoa. Inportatu elementuak atarian."
 
 #: src/Form/InvenioForm.php:54
 msgid "Main Invenio URL"
@@ -228,19 +219,17 @@ msgstr ""
 
 #: src/Form/CKANForm.php:54
 msgid "Main CKAN URL"
-msgstr "URL CKAN principale"
+msgstr ""
 
 #: src/Form/CKANForm.php:55
 msgid ""
 "URL of the main CKAN site. Example: <a target=\"_blank\" "
 "href=\"https://data.gov\">https://data.gov</a>"
 msgstr ""
-"URL del sito CKAN principale. Esempio: <a target=\"_blank\" "
-"href=\"https://data.gov\">https://data.gov</a>"
 
 #: src/Form/CKANForm.php:68
 msgid "CKAN Organization"
-msgstr "Organizzazione CKAN"
+msgstr ""
 
 #: src/Form/CKANForm.php:69
 msgid ""
@@ -248,9 +237,6 @@ msgid ""
 "new-york. If organization field is blank, all datasets under Main CKAN URL "
 "above will be imported."
 msgstr ""
-"L'identificativo dell'organizzazione CKAN da cui importare. Esempio: city-"
-"of-new-york. Se il campo organizzazione è lasciato vuoi, tutti i dataset "
-"sotto l'URL CKAN principale verranno importati."
 
 #: src/Form/CKANForm.php:81
 msgid ""
@@ -258,41 +244,32 @@ msgid ""
 " notice errors or missing data, try lowering this number. Increasing it "
 "might make imports faster."
 msgstr ""
-"Massimo numero di risultati da importare da un'istanza CKAN in una singola "
-"richiesta. Se noti errori o dati mancanti, prova a ridurre questo numero. "
-"Alzare questo numero può rendere l'importazione più veloci."
 
 #: src/Form/DataverseForm.php:44
 msgid "Main Dataverse URL"
-msgstr "URL Dataverse principale"
+msgstr ""
 
 #: src/Form/DataverseForm.php:45
 msgid ""
 "URL of the main Dataverse site. Example: <a target=\"_blank\" "
 "href=\"https://dataverse.harvard.edu\">https://dataverse.harvard.edu</a>"
 msgstr ""
-"URL del sito Dataverse principale. Esempio: <a target=\"_blank\" "
-"href=\"https://dataverse.harvard.edu\">https://dataverse.harvard.edu</a>"
 
 #: src/Form/DataverseForm.php:58
 msgid "Dataverse Identifier"
-msgstr "Identificativo Dataverse"
+msgstr ""
 
 #: src/Form/DataverseForm.php:59
 msgid ""
 "The identifier of the Dataverse to import from. If blank, all datasets under"
 " Main Dataverse URL above will be imported."
 msgstr ""
-"Identificativo del Dataverse da cui effettuare l'importazione. Se lasciato "
-"vuoto, tutti i dataset sotto l'URL Dataverse principale verranno importati."
 
 #: src/Form/DataverseForm.php:71
 msgid ""
 "Select the metadata format to export from Dataverse. NOTE: Ensure the format"
 " exists as a vocabulary in your Omeka instance."
 msgstr ""
-"Seleziona il formato di metadata da esportare dal Dataverse. N.B. Assicurati"
-" che il formato esista come vocabolario nella tua istanza di Omeka"
 
 #: src/Form/DataverseForm.php:90
 msgid ""
@@ -300,26 +277,23 @@ msgid ""
 "notice errors or missing data, try lowering this number. Increasing it might"
 " make imports faster."
 msgstr ""
-"Massimo numero di risultati da importare dal Dataverse in una singola "
-"richiesta. Se noti errori o dati mancanti, prova a ridurre questo numero. "
-"Alzare questo numero può rendere l'importazione più veloce."
 
 #: src/Controller/IndexController.php:26
 msgid "There was a problem connecting to the Dataverse"
-msgstr "C'è stato un problema cercando di connettersi al Dataverse"
+msgstr ""
 
 #: src/Controller/IndexController.php:32 src/Controller/IndexController.php:57
 #: src/Controller/IndexController.php:82
 #: src/Controller/IndexController.php:107
 #, php-format
 msgid "Importing in Job ID %s"
-msgstr "Importazione in corso in operazione con ID %s"
+msgstr "%s ID lanean inportazioa burutzen"
 
 #: src/Controller/IndexController.php:38 src/Controller/IndexController.php:63
 #: src/Controller/IndexController.php:88
 #: src/Controller/IndexController.php:113
 msgid "There was an error during validation"
-msgstr "C'è stato un errore durante al validazione"
+msgstr "Errorea egon da balidazio garaian"
 
 #: src/Controller/IndexController.php:130
 #, php-format
