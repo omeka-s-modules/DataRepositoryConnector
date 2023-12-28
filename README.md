@@ -4,6 +4,7 @@ Connect and import records to an Omeka S instance from the following data reposi
 
 - [Dataverse](https://dataverse.org)
 - [Zenodo](https://zenodo.org)
+- [Invenio](https://inveniosoftware.org)
 - [CKAN](https://ckan.org)
 
 See the [Omeka S user manual](http://omeka.org/s/docs/user-manual/modules/datarepositoryconnector/) for user documentation.
