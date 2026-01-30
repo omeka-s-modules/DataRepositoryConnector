@@ -64,7 +64,7 @@ class Module extends AbstractModule
     {
         $sharedEventManager->attach(
             'Omeka\Controller\Admin\Item',
-            'view.show.after',
+            'view.show.sidebar',
             [$this, 'showSource']
         );
 
@@ -84,9 +84,10 @@ class Module extends AbstractModule
         $dataItems = $response->getContent();
         if ($dataItems) {
             $dataItem = $dataItems[0];
-            echo '<h3>' . $view->translate('Original') . '</h3>';
-            echo '<p>' . $view->translate('Last Modified') . ' ' . $view->i18n()->dateFormat($dataItem->lastModified()) . '</p>';
-            echo '<p><a href="' . $dataItem->uri() . '">' . $view->translate('Link') . '</a></p>';
+            echo '<div class="meta-group">';
+            echo '<h4>' . $view->translate('Original') . '</h4>';
+            echo '<div class="value"><a href="' . $dataItem->uri() . '" target="_blank">' . $view->translate('Link') . '</a></div>';
+            echo '<div class="value">' . $view->translate('Last Modified: ') . ' ' . $view->i18n()->dateFormat($dataItem->lastModified()) . '</div></div>';
         }
     }
 
