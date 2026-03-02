@@ -17,6 +17,8 @@ class Import extends AbstractJob
     protected $propertyUriIdMap;
 
     protected $api;
+    
+    protected $resourceTemplateId;
 
     protected $itemSetArray;
 
@@ -56,6 +58,7 @@ class Import extends AbstractJob
         $this->updatedCount = 0;
         $this->itemSetArray = $this->getArg('itemSets', false);
         $this->itemSiteArray = $this->getArg('itemSites', false);
+        $this->resourceTemplateId = (int) $this->getArg('resource_template', 0);
 
         $this->originalIdentityMap = $this->getServiceLocator()->get('Omeka\EntityManager')->getUnitOfWork()->getIdentityMap();
         $this->importCollection($this->siteUri);
@@ -123,7 +126,11 @@ class Import extends AbstractJob
                     } else {
                         $resourceJson['o:site'] = [];
                     }
-                
+
+                    if ($this->resourceTemplateId) {
+                        $resourceJson['o:resource_template']['o:id'] = (int) $this->resourceTemplateId;
+                    }
+
                     //see if the item has already been imported
                     $response = $this->api->search('data_repo_items', ['uri' => $resourceJson['dataUri']]);
                     $content = $response->getContent();

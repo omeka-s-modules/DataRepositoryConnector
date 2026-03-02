@@ -3,6 +3,7 @@ namespace DataRepositoryConnector\Form;
 
 use Omeka\Form\Element\ItemSetSelect;
 use Omeka\Form\Element\SiteSelect;
+use Laminas\Form\Element\Select;
 use Omeka\Settings\UserSettings;
 use Omeka\Api\Manager as ApiManager;
 use Laminas\Authentication\AuthenticationService;
@@ -124,6 +125,28 @@ class CKANForm extends Form
             ],
         ]);
 
+        // Get resource templates
+        $results = $this->getApiManager()->search('resource_templates', ['limit' => 100])->getContent();
+        $valueOptions = [];
+        foreach ($results as $rt) {
+            $valueOptions[$rt->id()] = $rt->label();
+        }
+
+        $this->add([
+            'name' => 'resource_template',
+            'type' => Select::class,
+            'attributes' => [
+                'id' => 'resource-template-select',
+                'class' => 'chosen-select',
+            ],
+            'options' => [
+                'label' => 'Resource template', // @translate
+                'info' => 'Assign a resource template to all imported resources.', // @translate
+                'empty_option' => 'Select a template',
+                'value_options' => $valueOptions,
+            ],
+        ]);
+
         $this->add([
             'name' => 'itemSets',
             'type' => ItemSetSelect::class,
@@ -173,6 +196,10 @@ class CKANForm extends Form
         $inputFilter = $this->getInputFilter();
         $inputFilter->add([
             'name' => 'itemSets',
+            'required' => false,
+        ]);
+        $inputFilter->add([
+            'name' => 'resource_template',
             'required' => false,
         ]);
         $inputFilter->add([
