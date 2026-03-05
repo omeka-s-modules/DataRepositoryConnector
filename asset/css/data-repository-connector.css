@@ -1,0 +1,64 @@
+.data-repository-connector-inputs {
+    display: flex;
+    flex-direction: column;
+}
+
+.data-repository-connector tbody th {
+    border-bottom: 1px solid #dfdfdf;
+}
+
+.data-repository-connector td.data-repo-comment .tablesaw-cell-content {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    overflow: hidden;
+}
+
+.data-repository-connector td.data-repo-items .tablesaw-cell-content {
+    display: inline;
+}
+
+.data-repository-connector .tablesaw td:first-of-type {
+    background: transparent !important;
+}
+
+@media screen and (max-width: 640px) {
+    .data-repository-connector .tablesaw {
+        border: 0;
+    }
+
+    .data-repository-connector .tablesaw tbody th,
+    .data-repository-connector .tablesaw tbody td {
+        display: flex;
+    }
+
+    .data-repository-connector .tablesaw tbody tr {
+        border: 1px solid #dfdfdf;
+        border-radius: 3px;
+        margin-bottom: 1rem;
+    }
+
+    .data-repository-connector .tablesaw tbody th {
+        background-color: rgba(0,0,0,.04);
+        border-top: 0;
+    }
+
+    .data-repository-connector .tablesaw tbody tr td:last-child {
+        border-bottom: 0;
+    }
+
+    .tablesaw td:first-of-type .tablesaw-cell-label {
+        width: 30%;
+        height: auto;
+        padding: 0 .6em 0 0;
+    }
+
+    .tablesaw td:first-of-type .tablesaw-cell-content {
+        width: 70%;
+    }
+}
+
+#import {
+    position: relative;
+}

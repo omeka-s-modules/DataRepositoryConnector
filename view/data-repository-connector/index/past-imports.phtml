@@ -1,25 +1,30 @@
 <?php
+$this->headLink()->appendStylesheet($this->assetUrl('css/data-repository-connector.css', 'DataRepositoryConnector'));
+$this->htmlElement('body')->appendAttribute('class', 'data-repository-connector jobs undo browse');
 $escape = $this->plugin('escapeHtml');
 ?>
 
 <?php echo $this->pageTitle($this->translate('Data Repository Connector'), 1, $this->translate('Past Imports')); ?>
+
 <?php if(empty($imports)): ?>
 <div class="no-resources">
     <p><?php echo $this->translate('There are no past imports.'); ?></p>
 </div>
 <?php else: ?>
-<?php echo $this->pagination(); ?>
 
+<div class="browse-controls">
+    <?php echo $this->pagination(); ?>
+    <?php echo $this->browse()->renderSortSelector('data_repository_past_imports'); ?>
+</div>
 <form method='POST'>
     <fieldset id='page-actions'>
         <input type='submit' value="<?php echo $this->translate('Submit'); ?>" />
     </fieldset>
-    <table class="tablesaw" data-tablesaw-mode="stack">
+    <table class="tablesaw" data-tablesaw-mode="stack" aria-label="<?php echo $this->translate('Past Imports'); ?>">
         <thead>
             <tr>
-                <th><?php echo $escape($this->translate('Undo'));?></th>
-                <th><?php echo $escape($this->translate('Re-run'));?></th>
-                <th><?php echo $this->sortLink($this->translate('Job ID'), 'id');?></th>
+                <th scope="col"><?php echo $this->translate('Job ID'); ?></th>
+                <th scope="col"><?php echo $escape($this->translate('Actions'));?></th>
                 <th><?php echo $escape($this->translate('Data repository link'));?></th>
                 <th><?php echo $escape($this->translate('Comment'));?></th>
                 <th><?php echo $escape($this->translate('Items'));?></th>
@@ -32,35 +37,46 @@ $escape = $this->plugin('escapeHtml');
         <?php foreach ($imports as $import): ?>
         <?php $job = $import->job(); ?>
         <?php $undoJob = $import->undoJob(); ?>
+        <?php $disableOption = ($job->jobClass() == 'DataRepositoryConnector\Job\Undo') ? 'disabled' : ''; ?>
         <?php $rerunJob = $import->rerunJob(); ?>
-        <tr class="<?php echo isset($undone) ? 'undone' : ''; ?>" >
-            <td><input type='checkbox' name='undoJobs[]' value='<?php echo $job->id(); ?>' aria-label="<?php echo $this->translate('Undo job'); ?>" />
-            <td><input type='checkbox' name='rerunJobs[]' value='<?php echo $job->id(); ?>' aria-label="<?php echo $this->translate('Re-run job'); ?>" />
-            <td><?php echo $job->link($job->id()); ?></td>
+        <tr>
+            <th scope="row"><?php echo $job->link($job->id()); ?></th>
+            <td>
+                <div class="data-repository-connector-inputs" role="radiogroup" aria-label="<?php echo $this->translate('Action options'); ?>">
+                <label>
+                    <input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value checked aria-label="<?php echo $this->translate('[No Action]'); ?>" />
+                    <?php echo $this->translate('[No Action]'); ?>
+                </label>
+                <label>
+                    <input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='undo' aria-label="<?php echo $this->translate('Undo'); ?>" <?php echo $disableOption; ?> />
+                    <?php echo $this->translate('Undo'); ?>
+                </label>
+                <label>
+                    <input type='radio' name='jobActions[<?php echo $job->id(); ?>]' value='rerun' aria-label="<?php echo $this->translate('Re-run'); ?>" <?php echo $disableOption; ?> />
+                    <?php echo $this->translate('Re-run'); ?>
+                </label>
+                </div>
+            </td>
             <td>
                 <?php $args = $job->args();
                 if (isset($args['collection_link'])) {
-                    echo $this->hyperlink($args['data_repo_service'], $args['collection_link']);
+                    echo $this->hyperlink($args['data_repo_service'], $args['collection_link'], ['target' => '_blank']);
                 } else {
-                    echo $this->hyperlink($args['data_repo_service'], $args['main_uri']);
+                    echo $this->hyperlink($args['data_repo_service'], $args['main_uri'], ['target' => '_blank']);
                 }
                 ?>
             </td>
-            <td>
+            <td class="data-repo-comment">
                 <?php echo $import->comment(); ?>
             </td>
-            <td>
+            <td class="data-repo-items">
             <?php
-            if ($rerunJob) {
-                $linkID = $rerunJob->id();
-            } else {
-                $linkID = $job->id();
-            }
+            $linkID = $job->id();
             $totalCount = $import->addedCount() + $import->updatedCount();
             // Only link to search results for Job IDs with associated items
             $totalResults = $this->api()->search('items', ['data_import_id' => $linkID]);
-            if ($totalResults->getTotalResults() > 0 && $totalCount > 0) {
-                echo $this->hyperlink('Total: ' . $totalCount, $this->url('admin/default', ['controller' => 'item', 'action' => 'browse'], ['query' => ['data_import_id' => $linkID]])) . '<br>';
+            if ($totalResults->getTotalResults() > 0) {
+                echo $this->hyperlink('Total: ' . $totalResults->getTotalResults(), $this->url('admin/default', ['controller' => 'item', 'action' => 'browse'], ['query' => ['data_import_id' => $linkID]]), ['target' => '_blank']) . '<br>';
             } else {
                 echo 'Total: ' . $totalCount . '<br>';
             }
@@ -77,7 +93,7 @@ $escape = $this->plugin('escapeHtml');
                 $status = $this->translate('Undone in job ') . $undoJob->id() . ': ' . $escape($this->i18n()->dateFormat($undoJob->ended()));
             } else {
                 $status = $this->translate($job->status());
-            } 
+            }
             ?>
             <?php echo $status; ?>
             </td>

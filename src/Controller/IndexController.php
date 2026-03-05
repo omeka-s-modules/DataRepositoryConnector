@@ -121,24 +121,29 @@ class IndexController extends AbstractActionController
     {
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
-            if (isset($data['undoJobs'])) {
+            if (isset($data['jobActions'])) {
                 $undoJobIds = [];
-                foreach ($data['undoJobs'] as $jobId) {
-                    $undoJob = $this->undoJob($jobId);
-                    $undoJobIds[] = $undoJob->getId();
-                }
-                $message = new Message('Undo in progress on the following jobs: %s', // @translate
-                    implode(', ', $undoJobIds));
-                $this->messenger()->addSuccess($message);
-            } else if (isset($data['rerunJobs'])) {
                 $rerunJobIds = [];
-                foreach ($data['rerunJobs'] as $jobId) {
-                    $rerunJob = $this->rerunJob($jobId);
-                    $rerunJobIds[] = $jobId;
+                foreach ($data['jobActions'] as $jobId => $action) {
+                    if ($action == 'undo') {
+                        $this->undoJob($jobId);
+                        $undoJobIds[] = $jobId;
+                    }
+                    if ($action == 'rerun') {
+                        $this->rerunJob($jobId);
+                        $rerunJobIds[] = $jobId;
+                    }
                 }
-                $message = new Message('Rerun in progress on the following jobs: %s', // @translate
-                    implode(', ', $rerunJobIds));
-                $this->messenger()->addSuccess($message);
+                if (!empty($undoJobIds)) {
+                    $message = new Message('Undo in progress on the following jobs: %s', // @translate
+                        implode(', ', $undoJobIds));
+                    $this->messenger()->addSuccess($message);
+                }
+                if (!empty($rerunJobIds)) {
+                    $message = new Message('Rerun in progress on the following jobs: %s', // @translate
+                        implode(', ', $rerunJobIds));
+                    $this->messenger()->addSuccess($message);
+                }
             } else {
                 $this->messenger()->addError('Error: no jobs selected'); // @translate
             }
@@ -153,6 +158,7 @@ class IndexController extends AbstractActionController
         ];
         $response = $this->api()->search('data_repo_imports', $query);
         $this->paginator($response->getTotalResults(), $page);
+        $this->browse()->setDefaults('data_repository_past_imports');
         $view->setVariable('imports', $response->getContent());
         return $view;
     }
