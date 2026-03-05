@@ -142,6 +142,7 @@ class IndexController extends AbstractActionController
             } else {
                 $this->messenger()->addError('Error: no jobs selected'); // @translate
             }
+            return $this->redirect()->toRoute('admin/data-repository-connector/past-imports');
         }
         $view = new ViewModel;
         $page = $this->params()->fromQuery('page', 1);
