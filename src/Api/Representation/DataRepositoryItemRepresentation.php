@@ -8,10 +8,10 @@ class DataRepositoryItemRepresentation extends AbstractEntityRepresentation
     public function getJsonLd()
     {
         return [
-            'last_modified' => $this->resource->getLastModified(),
-            'uri' => $this->resource->getUri(),
-            'o:item' => $this->getReference(),
-            'o:job' => $this->getReference(),
+            'last_modified' => $this->lastModified(),
+            'uri' => $this->uri(),
+            'o:item' => $this->item(),
+            'o:job' => $this->job(),
         ];
     }
 
