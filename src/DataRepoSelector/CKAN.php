@@ -72,12 +72,16 @@ class CKAN implements DataRepoSelectorInterface
         $apiLink = $link . '/api/3/action/package_search';
         $this->client->setUri($apiLink);
         // If no organization id found, import entire CKAN instance
-        $subcollection = $localId ?: null;
-        $this->client->setParameterGet(['q' => 'organization:' . $subcollection,
-                                        'rows' => $limit,
-                                        'start' => $offset,
-                                       ]);
+        $params = [
+            'rows' => $limit,
+            'start' => $offset,
+        ];
+        if ($localId) {
+            $params['q'] = 'organization:' . $localId;
+        }
+        $this->client->setParameterGet($params);
         $collectionResponse = $this->client->send();
+
         if (!$collectionResponse->isSuccess()) {
             throw new Exception\RuntimeException(sprintf(
                 'Requested "%s" got "%s".', $link, $collectionResponse->renderStatusLine()
@@ -135,8 +139,8 @@ class CKAN implements DataRepoSelectorInterface
         }
         
         foreach ($itemMetadataArray as $key => $value) {
+            $fieldArray = [];
             if (isset($this->fieldIdMap[$key])) {
-                $fieldArray = [];
                 $fieldArray['name'] = $key;
                 $fieldArray['field_id'] = $this->fieldIdMap[$key];
             }
@@ -173,7 +177,7 @@ class CKAN implements DataRepoSelectorInterface
         
         foreach ($itemDcatArray as $key => $value) {
             // Save dcat keywords as dcterms.subject values
-            if ($key == 'keyword') {
+            if ($key == 'keyword' && isset($this->fieldIdMap['subject'])) {
                 $valueArray['@value'] = (string)$value;
                 $valueArray['type'] = 'literal';
                 $valueArray['property_id'] = $this->fieldIdMap['subject'];
@@ -186,20 +190,25 @@ class CKAN implements DataRepoSelectorInterface
 
     public function processItemFiles($itemData, $itemJson)
     {
+        $fileMDArray = [];
         foreach ($itemData['resources'] as $file) {
             $fileURL = $file['url'];
-            $itemJson['o:media'][] = [
+            $fileMDArray = [
                 'o:ingester' => 'url',
                 'o:source' => $fileURL,
                 'ingest_url' => $fileURL,
-                'dcterms:title' => [
+            ];
+
+            if (isset($this->fieldIdMap['title'])) {
+                $fileMDArray['dcterms:title'] = [
                     [
                         'type' => 'literal',
                         '@value' => $file['name'],
                         'property_id' => $this->fieldIdMap['title'],
                     ],
-                ],
-            ];
+                ];
+            }
+            $itemJson['o:media'][] = $fileMDArray;
         }
         return $itemJson;
     }

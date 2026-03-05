@@ -17,7 +17,7 @@ class Import extends AbstractJob
     protected $propertyUriIdMap;
 
     protected $api;
-    
+
     protected $resourceTemplateId;
 
     protected $itemSetArray;
@@ -119,6 +119,7 @@ class Import extends AbstractJob
                         $resourceJson['o:item_set'] = $this->itemSetArray;
                     }
                     if ($this->itemSiteArray) {
+                        $itemSites = [];
                         foreach ($this->itemSiteArray as $itemSite) {
                             $itemSites[] = $itemSite;
                         }
@@ -169,6 +170,7 @@ class Import extends AbstractJob
 
     protected function createItems($toCreate)
     {
+        $this->client->resetParameters(true);
         $createResponse = $this->api->batchCreate('items', $toCreate, [], ['continueOnError' => true]);
         $this->addedCount = $this->addedCount + count($createResponse->getContent());
 
@@ -197,13 +199,13 @@ class Import extends AbstractJob
         $em = $this->getServiceLocator()->get('Omeka\EntityManager');
         $updateResponses = [];
         foreach ($toUpdate as $importRecordId => $itemJson) {
-            $this->updatedCount = $this->updatedCount + 1;
             try {
                 $updateResponses[$importRecordId] = $this->api->update('items', $itemJson['id'], $itemJson, [], ['flushEntityManager' => false]);
-            } catch (ValidationException $e) {
+            } catch (\Exception $e) {
                 $this->logger->err((string) $e);
                 continue;
             }
+            $this->updatedCount = $this->updatedCount + 1;
         }
 
         foreach ($updateResponses as $importRecordId => $resourceReference) {

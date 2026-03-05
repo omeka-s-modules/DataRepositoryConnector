@@ -80,6 +80,7 @@ class Zenodo implements DataRepoSelectorInterface
                                         'page' => $this->page,
                                         'sort' => 'mostrecent'
                                        ]);
+
         $collectionResponse = $this->client->send();
         if (!$collectionResponse->isSuccess()) {
             throw new Exception\RuntimeException(sprintf(

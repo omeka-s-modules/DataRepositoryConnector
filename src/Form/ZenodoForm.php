@@ -87,7 +87,7 @@ class ZenodoForm extends Form
             'attributes' => [
                 'id' => 'limit',
                 'required' => 'true',
-                'value' => '100',
+                'value' => '25',
             ],
         ]);
         

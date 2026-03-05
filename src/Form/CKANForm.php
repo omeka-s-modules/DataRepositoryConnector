@@ -53,7 +53,7 @@ class CKANForm extends Form
             'type' => 'url',
             'options' => [
                 'label' => 'Main CKAN URL', // @translate
-                'info' => 'URL of the main CKAN site. Example: <a target="_blank" href="https://data.gov">https://data.gov</a>', // @translate
+                'info' => 'URL of the main CKAN site. Requires <a target="_blank" href="https://docs.ckan.org/projects/ckanext-dcat/en/latest/endpoints/">RDF-DCAT plugin</a>. Example: <a target="_blank" href="https://open.canada.ca/data/en/">https://open.canada.ca/data/en/</a>', // @translate
                 'escape_info' => false,
             ],
             'attributes' => [
@@ -67,7 +67,7 @@ class CKANForm extends Form
             'type' => 'text',
             'options' => [
                 'label' => 'CKAN Organization', // @translate
-                'info' => 'The identifier of the CKAN organization to import from. Example: city-of-new-york. If organization field is blank, all datasets under Main CKAN URL above will be imported.', // @translate
+                'info' => 'The identifier of the CKAN organization to import from. Example: cdic-sadc. If organization field is blank, all datasets under Main CKAN URL above will be imported.', // @translate
             ],
             'attributes' => [
                 'id' => 'collection_id',

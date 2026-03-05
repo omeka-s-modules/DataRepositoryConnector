@@ -20,9 +20,9 @@ class IndexController extends AbstractActionController
             $data = $this->params()->fromPost();
             $form->setData($data);
             if ($form->isValid()) {
-                $uri = $data['main_uri'];
+                $test_uri = $data['main_uri'] . '/api/info/version';
                 // Check that the Dataverse is available
-                if (! file_get_contents($uri)) {
+                if (! file_get_contents($test_uri)) {
                     $this->messenger()->addError('There was a problem connecting to the Dataverse'); // @translate
                     return $view;
                 }
