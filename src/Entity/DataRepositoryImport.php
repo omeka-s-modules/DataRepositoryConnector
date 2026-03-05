@@ -45,7 +45,7 @@ class DataRepositoryImport extends AbstractEntity
     protected $rerunJob;
 
     /**
-     * @Column(type="string", nullable=true)
+     * @Column(type="text", nullable=true)
      */
     protected $comment;
 
