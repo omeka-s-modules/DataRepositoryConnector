@@ -58,6 +58,9 @@ class Module extends AbstractModule
             $connection->exec("ALTER TABLE data_repository_import ADD rerun_job_id INT DEFAULT NULL AFTER undo_job_id;");
             $connection->exec("ALTER TABLE data_repository_import ADD CONSTRAINT FK_72B61A477071F49C FOREIGN KEY (rerun_job_id) REFERENCES job (id);");
         }
+        if (Comparator::lessThan($oldVersion, '1.4.0')) {
+            $connection->exec("ALTER TABLE data_repository_import CHANGE comment comment LONGTEXT DEFAULT NULL;");
+        }
     }
 
     public function attachListeners(SharedEventManagerInterface $sharedEventManager)
