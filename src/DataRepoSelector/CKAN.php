@@ -153,9 +153,6 @@ class CKAN implements DataRepoSelectorInterface
             }
             
             $valueArray = [];
-            if (isset($itemMetadataArray->language)) {
-                $valueArray['@language'] = (string)$itemMetadataArray->language;
-            }
 
             // Handle publisher value in nested foaf array
             if ($value->children('foaf', true)) {

@@ -162,9 +162,6 @@ class Dataverse implements DataRepoSelectorInterface
             }
 
             $valueArray = [];
-            if (isset($itemMetadataArray->language)) {
-                $valueArray['@language'] = (string)$itemMetadataArray->language;
-            }
             // Handle nested arrays in metadata fields
             if (is_array($value)) {
                 $iterate = function (&$value) use (&$iterate, &$valueArray, &$itemJson, $fieldArray) {

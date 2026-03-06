@@ -143,11 +143,6 @@ class Invenio implements DataRepoSelectorInterface
         foreach ($itemMetadataArray['metadata'] as $key => $value) {
             $fieldArray = [];
             $valueArray = [];
-            if (isset($itemMetadataArray['metadata']['language']) && is_string($itemMetadataArray['metadata']['language'])) {
-                $valueArray['@language'] = $itemMetadataArray['metadata']['language'];
-            } else if (isset($itemMetadataArray['metadata']['languages']) && is_string($itemMetadataArray['metadata']['language'][0])) {
-                $valueArray['@language'] = (string)$itemMetadataArray['metadata']['languages'][0];
-            }
             
             switch ($key) {
                 // Use higher-level descriptive keys over generic fieldnames
