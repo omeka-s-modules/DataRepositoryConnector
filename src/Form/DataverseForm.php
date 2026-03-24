@@ -57,7 +57,8 @@ class DataverseForm extends Form
             'type' => 'text',
             'options' => [
                 'label' => 'Dataverse Identifier', // @translate
-                'info' => 'The identifier of the Dataverse to import from. If blank, all datasets under Main Dataverse URL above will be imported.', // @translate
+                'info' => 'The identifier of the Dataverse to import from. Listed at end of URL. Example: "odas" from <a target="_blank" href="https://dataverse.harvard.edu/dataverse/odas">https://dataverse.harvard.edu/dataverse/odas</a>. If blank, all datasets under Main Dataverse URL above will be imported.', // @translate
+                'escape_info' => false,    
             ],
             'attributes' => [
                 'id' => 'collection_id',
