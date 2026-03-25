@@ -114,6 +114,13 @@ class Import extends AbstractJob
                         continue;
                     }
 
+                    // Decode HTML entities and strip tags from all literal metadata values
+                    array_walk_recursive($resourceJson, function (&$value, $key) {
+                        if ($key === '@value' && is_string($value)) {
+                            $value = trim(strip_tags(html_entity_decode($value, ENT_QUOTES | ENT_HTML5)));
+                        }
+                    });
+
                     // Assign sets & sites to item
                     if ($this->itemSetArray) {
                         $resourceJson['o:item_set'] = $this->itemSetArray;
