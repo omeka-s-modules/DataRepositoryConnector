@@ -89,7 +89,8 @@ class Module extends AbstractModule
             $dataItem = $dataItems[0];
             echo '<div class="meta-group">';
             echo '<h4>' . $view->translate('Original') . '</h4>';
-            echo '<div class="value"><a href="' . $dataItem->uri() . '" target="_blank">' . $view->translate('Link') . '</a></div>';
+            $linkLabel = $item->displayTitle() ?: $view->translate('Link');
+            echo '<div class="value"><a href="' . $dataItem->uri() . '" target="_blank">' . $view->escapeHtml($linkLabel) . '</a></div>';
             echo '<div class="value">' . $view->translate('Last Modified: ') . ' ' . $view->i18n()->dateFormat($dataItem->lastModified()) . '</div></div>';
         }
     }
