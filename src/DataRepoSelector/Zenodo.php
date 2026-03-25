@@ -193,10 +193,10 @@ class Zenodo implements DataRepoSelectorInterface
             return $itemJson;
         }
         foreach ($itemData['files'] as $file) {
-            $fileURL = $file['links']['self'];
+            $fileURL = $file['links']['content'] ?? $file['links']['self'];
             $itemJson['o:media'][] = [
                 'o:ingester' => 'url',
-                'o:source' => $fileURL,
+                'o:source' => $file['key'],
                 'ingest_url' => $fileURL,
                 'dcterms:title' => [
                     [

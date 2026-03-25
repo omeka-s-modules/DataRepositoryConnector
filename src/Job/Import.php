@@ -183,11 +183,50 @@ class Import extends AbstractJob
     protected function createItems($toCreate)
     {
         $this->client->resetParameters(true);
-        $createResponse = $this->api->batchCreate('items', $toCreate, [], ['continueOnError' => true]);
-        $this->addedCount = $this->addedCount + count($createResponse->getContent());
+
+        try {
+            $createResponse = $this->api->batchCreate('items', $toCreate, [], ['continueOnError' => true]);
+            $createContent = $createResponse->getContent();
+            $this->addedCount += count($createContent);
+        } catch (\Omeka\Api\Exception\ValidationException $e) {
+            // batchCreate can throw even with continueOnError when individual items
+            // have media validation errors. Fall back to creating items
+            // one at a time so that only the offending files are skipped, not the entire batch.
+            $this->logger->warn(sprintf(
+                'Batch item creation encountered validation errors; retrying items individually. Error: %s',
+                $e->getMessage()
+            ));
+            $createContent = [];
+            foreach ($toCreate as $id => $itemData) {
+                try {
+                    $response = $this->api->create('items', $itemData);
+                    $createContent[$id] = $response->getContent();
+                    $this->addedCount++;
+                } catch (\Omeka\Api\Exception\ValidationException $itemException) {
+                    if (!empty($itemData['o:media'])) {
+                        $this->logger->warn(sprintf(
+                            'Item failed validation with files attached; retrying without files. Error: %s',
+                            $itemException->getMessage()
+                        ));
+                        unset($itemData['o:media']);
+                        try {
+                            $response = $this->api->create('items', $itemData);
+                            $createContent[$id] = $response->getContent();
+                            $this->addedCount++;
+                        } catch (\Exception $retryException) {
+                            $this->logger->err(sprintf(
+                                'Item could not be created even without files: %s',
+                                $retryException->getMessage()
+                            ));
+                        }
+                    } else {
+                        $this->logger->err(sprintf('Item could not be created: %s', $itemException->getMessage()));
+                    }
+                }
+            }
+        }
 
         $createImportRecordsJson = [];
-        $createContent = $createResponse->getContent();
 
         foreach ($createContent as $id => $resourceReference) {
             // Get the original data used for individual item creation
