@@ -79,24 +79,19 @@ class ZenodoForm extends Form
 
         $this->add([
             'name' => 'limit',
-            'type' => 'text',
-            'options' => [
-                'label' => 'Limit', // @translate
-                'info' => 'The maximum number of results to retrieve at once from Zenodo community. If you notice errors or missing data, try lowering this number. Increasing it might make imports faster.', // @translate
-            ],
+            'type' => 'hidden',
             'attributes' => [
                 'id' => 'limit',
-                'required' => 'true',
                 'value' => '25',
             ],
         ]);
-        
+
         $this->add([
             'name' => 'test_import',
             'type' => 'checkbox',
             'options' => [
                 'label' => 'Test import', // @translate
-                'info' => 'If checked, ONLY import the # of results indicated in Limit field above. Useful for testing and fine-tuning.', // @translate
+                'info' => 'If checked, ONLY import the first 25 results. Useful for testing and fine-tuning.', // @translate
             ],
             'attributes' => [
                 'id' => 'test-import',

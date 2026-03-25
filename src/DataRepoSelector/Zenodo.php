@@ -76,7 +76,7 @@ class Zenodo implements DataRepoSelectorInterface
         $apiLink = $link . '/api/records/';
         $this->client->setUri($apiLink);
         $this->client->setParameterGet(['q' => 'communities:' . $localId,
-                                        'size' => $limit,
+                                        'size' => 25,
                                         'page' => $this->page,
                                         'sort' => 'mostrecent'
                                        ]);
