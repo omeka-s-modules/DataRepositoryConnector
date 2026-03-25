@@ -191,6 +191,9 @@ class CKAN implements DataRepoSelectorInterface
 
     public function processItemFiles($itemData, $itemJson)
     {
+        if (empty($itemData['resources'])) {
+            return $itemJson;
+        }
         $fileMDArray = [];
         foreach ($itemData['resources'] as $file) {
             $fileURL = $file['url'];

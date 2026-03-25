@@ -189,6 +189,9 @@ class Zenodo implements DataRepoSelectorInterface
 
     public function processItemFiles($itemData, $itemJson)
     {
+        if (empty($itemData['files'])) {
+            return $itemJson;
+        }
         foreach ($itemData['files'] as $file) {
             $fileURL = $file['links']['self'];
             $itemJson['o:media'][] = [
