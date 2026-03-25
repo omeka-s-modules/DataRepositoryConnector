@@ -32,7 +32,7 @@ class Module extends AbstractModule
     {
         $connection = $serviceLocator->get('Omeka\Connection');
         $connection->exec("CREATE TABLE data_repository_item (id INT AUTO_INCREMENT NOT NULL, item_id INT NOT NULL, job_id INT NOT NULL, uri VARCHAR(255) NOT NULL, last_modified DATETIME NOT NULL, UNIQUE INDEX UNIQ_D984EBE1126F525E (item_id), INDEX IDX_D984EBE1BE04EA9 (job_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;");
-        $connection->exec("CREATE TABLE data_repository_import (id INT AUTO_INCREMENT NOT NULL, job_id INT NOT NULL, undo_job_id INT DEFAULT NULL, rerun_job_id INT DEFAULT NULL, added_count INT NOT NULL, updated_count INT NOT NULL, comment LONGTEXT DEFAULT NULL, UNIQUE INDEX UNIQ_72B61A47BE04EA9 (job_id), UNIQUE INDEX UNIQ_72B61A474C276F75 (undo_job_id), UNIQUE INDEX UNIQ_72B61A477071F49C (rerun_job_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;");
+        $connection->exec("CREATE TABLE data_repository_import (id INT AUTO_INCREMENT NOT NULL, job_id INT NOT NULL, undo_job_id INT DEFAULT NULL, rerun_job_id INT DEFAULT NULL, added_count INT NOT NULL, updated_count INT NOT NULL, added_files INT NOT NULL, comment LONGTEXT DEFAULT NULL, UNIQUE INDEX UNIQ_72B61A47BE04EA9 (job_id), UNIQUE INDEX UNIQ_72B61A474C276F75 (undo_job_id), UNIQUE INDEX UNIQ_72B61A477071F49C (rerun_job_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB;");
         $connection->exec("ALTER TABLE data_repository_item ADD CONSTRAINT FK_D984EBE1126F525E FOREIGN KEY (item_id) REFERENCES item (id) ON DELETE CASCADE;");
         $connection->exec("ALTER TABLE data_repository_item ADD CONSTRAINT FK_D984EBE1BE04EA9 FOREIGN KEY (job_id) REFERENCES job (id);");
         $connection->exec("ALTER TABLE data_repository_import ADD CONSTRAINT FK_72B61A47BE04EA9 FOREIGN KEY (job_id) REFERENCES job (id)");
@@ -61,6 +61,9 @@ class Module extends AbstractModule
         if (Comparator::lessThan($oldVersion, '1.4.0')) {
             $connection->exec("ALTER TABLE data_repository_import CHANGE comment comment LONGTEXT DEFAULT NULL;");
         }
+        if (Comparator::lessThan($oldVersion, '1.5.0')) {
+            $connection->exec("ALTER TABLE data_repository_import ADD added_files INT NOT NULL;");
+        }
     }
 
     public function attachListeners(SharedEventManagerInterface $sharedEventManager)
@@ -75,6 +78,11 @@ class Module extends AbstractModule
             \Omeka\Api\Adapter\ItemAdapter::class,
             'api.search.query',
             [$this, 'importSearch']
+        );
+        $sharedEventManager->attach(
+            \Omeka\Api\Adapter\MediaAdapter::class,
+            'api.search.query',
+            [$this, 'mediaSearch']
         );
     }
 
@@ -105,6 +113,23 @@ class Module extends AbstractModule
             $qb->innerJoin(
                 \DataRepositoryConnector\Entity\DataRepositoryItem::class, $importItemAlias,
                 'WITH', "$importItemAlias.item = omeka_root.id"
+            )->andWhere($qb->expr()->eq(
+                "$importItemAlias.job",
+                $adapter->createNamedParameter($qb, $query['data_import_id'])
+            ));
+        }
+    }
+
+    public function mediaSearch($event)
+    {
+        $query = $event->getParam('request')->getContent();
+        if (isset($query['data_import_id'])) {
+            $qb = $event->getParam('queryBuilder');
+            $adapter = $event->getTarget();
+            $importItemAlias = $adapter->createAlias();
+            $qb->innerJoin(
+                \DataRepositoryConnector\Entity\DataRepositoryItem::class, $importItemAlias,
+                'WITH', "$importItemAlias.item = omeka_root.item"
             )->andWhere($qb->expr()->eq(
                 "$importItemAlias.job",
                 $adapter->createNamedParameter($qb, $query['data_import_id'])

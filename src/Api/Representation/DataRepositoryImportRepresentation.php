@@ -10,6 +10,7 @@ class DataRepositoryImportRepresentation extends AbstractEntityRepresentation
         return [
             'added_count' => $this->resource->getAddedCount(),
             'updated_count' => $this->resource->getUpdatedCount(),
+            'added_files' => $this->resource->getAddedFiles(),
             'comment' => $this->resource->getComment(),
             'o:job' => $this->getReference(),
             'o:undo_job' => $this->getReference(),
@@ -53,5 +54,10 @@ class DataRepositoryImportRepresentation extends AbstractEntityRepresentation
     public function updatedCount()
     {
         return $this->resource->getUpdatedCount();
+    }
+
+    public function addedFiles()
+    {
+        return $this->resource->getAddedFiles();
     }
 }

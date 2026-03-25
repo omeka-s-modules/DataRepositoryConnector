@@ -28,6 +28,8 @@ class Import extends AbstractJob
 
     protected $updatedCount;
 
+    protected $addedFiles;
+
     public function perform()
     {
         $this->logger = $this->getServiceLocator()->get('Omeka\Logger');
@@ -51,11 +53,13 @@ class Import extends AbstractJob
                             'comment' => $comment,
                             'added_count' => 0,
                             'updated_count' => 0,
+                            'added_files' => 0,
                           ];
         $response = $this->api->create('data_repo_imports', $dataRepoImportJson);
         $importRecordId = $response->getContent()->id();
         $this->addedCount = 0;
         $this->updatedCount = 0;
+        $this->addedFiles = 0;
         $this->itemSetArray = $this->getArg('itemSets', false);
         $this->itemSiteArray = $this->getArg('itemSites', false);
         $this->resourceTemplateId = (int) $this->getArg('resource_template', 0);
@@ -68,6 +72,7 @@ class Import extends AbstractJob
                             'comment' => $comment,
                             'added_count' => $this->addedCount,
                             'updated_count' => $this->updatedCount,
+                            'added_files' => $this->addedFiles,
                           ];
         $response = $this->api->update('data_repo_imports', $importRecordId, $dataRepoImportJson);
     }
@@ -185,8 +190,18 @@ class Import extends AbstractJob
         $createContent = $createResponse->getContent();
 
         foreach ($createContent as $id => $resourceReference) {
-            //get the original data used for individual item creation
+            // Get the original data used for individual item creation
             $toCreateData = $toCreate[$id];
+
+            // Count successfully added files
+            if ($this->getArg('ingest_files')) {
+                $itemRepresentation = $this->api->read('items', $resourceReference->id())->getContent();
+                foreach ($itemRepresentation->media() as $media) {
+                    if ($media->hasOriginal()) {
+                        $this->addedFiles++;
+                    }
+                }
+            }
 
             $dataRepoItemJson = [
                             'o:job' => ['o:id' => $this->job->getId()],
@@ -217,6 +232,16 @@ class Import extends AbstractJob
 
         foreach ($updateResponses as $importRecordId => $resourceReference) {
             $toUpdateData = $toUpdate[$importRecordId];
+
+            // Count successfully added files
+            if ($this->getArg('ingest_files')) {
+                foreach ($resourceReference->getContent()->media() as $media) {
+                    if ($media->hasOriginal()) {
+                        $this->addedFiles++;
+                    }
+                }
+            }
+
             $dataRepoItemJson = [
                             'o:job' => ['o:id' => $this->job->getId()],
                             'uri' => $toUpdateData['dataUri'],
