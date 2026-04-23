@@ -15,6 +15,7 @@
     overflow: hidden;
 }
 
+.data-repository-connector td.data-repo-link .tablesaw-cell-content,
 .data-repository-connector td.data-repo-resources .tablesaw-cell-content {
     display: inline;
 }

@@ -57,12 +57,30 @@ $escape = $this->plugin('escapeHtml');
                 </label>
                 </div>
             </td>
-            <td>
-                <?php $args = $job->args();
-                if (isset($args['collection_link'])) {
-                    echo $this->hyperlink($args['data_repo_service'], $args['collection_link'], ['target' => '_blank']);
-                } else {
-                    echo $this->hyperlink($args['data_repo_service'], $args['main_uri'], ['target' => '_blank']);
+            <td class="data-repo-link">
+                <?php
+                $args = $job->args();
+                $service = $args['data_repo_service'] ?? '';
+                $mainUri = $args['main_uri'] ?? '';
+                $collectionId = $args['collection_id'] ?? '';
+                $collectionLink = $args['collection_link'] ?? $mainUri;
+                $shortUri = preg_replace('#^https?://#', '', rtrim($mainUri, '/'));
+                $repoLink = $this->hyperlink($shortUri, $collectionLink, ['target' => '_blank']);
+                switch ($service) {
+                    case 'dataverse':
+                        echo $collectionId ? 'Dataverse: ' . $escape($collectionId) . ' (' . $repoLink . ')' : 'Dataverse (' . $repoLink . ')';
+                        break;
+                    case 'zenodo':
+                        echo $collectionId ? 'Community: ' . $escape($collectionId) . ' (' . $repoLink . ')' : 'Zenodo (' . $repoLink . ')';
+                        break;
+                    case 'invenio':
+                        echo $collectionId ? 'Search Query: ' . $escape($collectionId) . ' (' . $repoLink . ')' : 'Invenio (' . $repoLink . ')';
+                        break;
+                    case 'ckan':
+                        echo $collectionId ? 'Collection: ' . $escape($collectionId) . ' (' . $repoLink . ')' : 'CKAN (' . $repoLink . ')';
+                        break;
+                    default:
+                        echo $repoLink;
                 }
                 ?>
             </td>
