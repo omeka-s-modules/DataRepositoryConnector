@@ -1,17 +1,13 @@
 <?php
 namespace DataRepositoryConnector\Job;
 
-use DateTime;
 use Omeka\Job\AbstractJob;
-use EasyRdf\Graph;
-use EasyRdf\Resource as RdfResource;
-use EasyRdf\RdfNamespace;
 use Omeka\Job\Exception;
 
 class Import extends AbstractJob
 {
     protected $logger;
-    
+
     protected $client;
 
     protected $propertyUriIdMap;
@@ -49,12 +45,12 @@ class Import extends AbstractJob
         $this->client->setOptions(['timeout' => 120]);
         $comment = $this->getArg('comment');
         $dataRepoImportJson = [
-                            'o:job' => ['o:id' => $this->job->getId()],
-                            'comment' => $comment,
-                            'added_count' => 0,
-                            'updated_count' => 0,
-                            'added_files' => 0,
-                          ];
+            'o:job' => ['o:id' => $this->job->getId()],
+            'comment' => $comment,
+            'added_count' => 0,
+            'updated_count' => 0,
+            'added_files' => 0,
+        ];
         $response = $this->api->create('data_repo_imports', $dataRepoImportJson);
         $importRecordId = $response->getContent()->id();
         $this->addedCount = 0;
@@ -68,12 +64,12 @@ class Import extends AbstractJob
         $this->importCollection($this->siteUri);
 
         $dataRepoImportJson = [
-                            'o:job' => ['o:id' => $this->job->getId()],
-                            'comment' => $comment,
-                            'added_count' => $this->addedCount,
-                            'updated_count' => $this->updatedCount,
-                            'added_files' => $this->addedFiles,
-                          ];
+            'o:job' => ['o:id' => $this->job->getId()],
+            'comment' => $comment,
+            'added_count' => $this->addedCount,
+            'updated_count' => $this->updatedCount,
+            'added_files' => $this->addedFiles,
+        ];
         $response = $this->api->update('data_repo_imports', $importRecordId, $dataRepoImportJson);
     }
 
@@ -93,7 +89,7 @@ class Import extends AbstractJob
                 if ($offset >= $itemCount || $this->getArg('test_import')) {
                     $hasNext = false;
                 }
-                
+
                 $toCreate = [];
                 $toUpdate = [];
 
@@ -113,7 +109,7 @@ class Import extends AbstractJob
                             continue;
                         }
                         break;
-                    } while($attempts < $NUM_OF_ATTEMPTS);
+                    } while ($attempts < $NUM_OF_ATTEMPTS);
 
                     if (empty($resourceJson)) {
                         continue;
@@ -152,16 +148,16 @@ class Import extends AbstractJob
                     } else {
                         $importRecord = $content[0];
                     }
-                
+
                     if ($importRecord) {
                         $itemId = $importRecord->item()->id();
                         // keep existing item sets/sites, add any new item sets/sites
                         $existingItem = $this->api->search('items', ['id' => $itemId])->getContent();
-                
+
                         $existingItemSets = array_keys($existingItem[0]->itemSets()) ?: [];
                         $newItemSets = $resourceJson['o:item_set'] ?: [];
                         $resourceJson['o:item_set'] = array_merge($existingItemSets, $newItemSets);
-                
+
                         $existingItemSites = array_keys($existingItem[0]->sites()) ?: [];
                         $newItemSites = $resourceJson['o:site'] ?: [];
                         $resourceJson['o:site'] = array_merge($existingItemSites, $newItemSites);
@@ -243,11 +239,11 @@ class Import extends AbstractJob
             }
 
             $dataRepoItemJson = [
-                            'o:job' => ['o:id' => $this->job->getId()],
-                            'o:item' => ['o:id' => $resourceReference->id()],
-                            'uri' => $toCreateData['dataUri'],
-                            'last_modified' => $toCreateData['dataLastModified'],
-                        ];
+                'o:job' => ['o:id' => $this->job->getId()],
+                'o:item' => ['o:id' => $resourceReference->id()],
+                'uri' => $toCreateData['dataUri'],
+                'last_modified' => $toCreateData['dataLastModified'],
+            ];
             $createImportRecordsJson[] = $dataRepoItemJson;
         }
 
@@ -282,10 +278,10 @@ class Import extends AbstractJob
             }
 
             $dataRepoItemJson = [
-                            'o:job' => ['o:id' => $this->job->getId()],
-                            'uri' => $toUpdateData['dataUri'],
-                            'last_modified' => $toUpdateData['dataLastModified'],
-                        ];
+                'o:job' => ['o:id' => $this->job->getId()],
+                'uri' => $toUpdateData['dataUri'],
+                'last_modified' => $toUpdateData['dataLastModified'],
+            ];
             $updateImportRecordResponse = $this->api->update('data_repo_items', $importRecordId, $dataRepoItemJson, [], ['flushEntityManager' => false]);
         }
         $em->flush();

@@ -17,7 +17,7 @@ class Invenio implements DataRepoSelectorInterface
      * @var Settings
      */
     protected $settings;
-    
+
     /**
      * @var ApiManager
      */
@@ -28,11 +28,12 @@ class Invenio implements DataRepoSelectorInterface
      */
     protected $client;
 
-    public function __construct(ApiManager $apiManager, HttpClient $client) {
+    public function __construct(ApiManager $apiManager, HttpClient $client)
+    {
         $this->apiManager = $apiManager;
         $this->client = $client;
     }
-    
+
     public function getLabel()
     {
         return 'Invenio'; // @translate
@@ -44,7 +45,7 @@ class Invenio implements DataRepoSelectorInterface
         $this->fieldIdMap = [];
 
         // Depending on export format, prepare metadata fields
-        switch($this->dataMetadataFormat) {
+        switch ($this->dataMetadataFormat) {
             case 'dcterms':
                 $this->prefix = 'dct';
                 $this->namespace = 'http://purl.org/dc/terms/';
@@ -78,23 +79,23 @@ class Invenio implements DataRepoSelectorInterface
 
         // Get iterable response
         $this->client->setParameterGet(['q' => $searchQuery,
-                                        'size' => $limit,
-                                        'page' => $this->page,
-                                       ]);
+            'size' => $limit,
+            'page' => $this->page,
+        ]);
         $collectionResponse = $this->client->send();
         if (!$collectionResponse->isSuccess()) {
             throw new Exception\RuntimeException(sprintf(
                 'Requested "%s" got "%s".', $link, $collectionResponse->renderStatusLine()
             ));
         }
-        
+
         $collection = json_decode($collectionResponse->getBody(), true);
         $responseArray['item_count'] = $collection['hits']['total'];
         $responseArray['collection_response'] = $collection['hits']['hits'];
 
         return $responseArray;
     }
-    
+
     public function buildResource($siteUri, $dataMetadataFormat, $ingestFiles, $itemData)
     {
         $itemJson = [];
@@ -115,7 +116,7 @@ class Invenio implements DataRepoSelectorInterface
             ));
         }
         $itemJson = $this->processItemMetadata($response, $itemJson);
-        
+
         if ($ingestFiles) {
             $itemJson = $this->processItemFiles($itemData, $itemJson);
         }
@@ -143,7 +144,7 @@ class Invenio implements DataRepoSelectorInterface
         foreach ($itemMetadataArray['metadata'] as $key => $value) {
             $fieldArray = [];
             $valueArray = [];
-            
+
             switch ($key) {
                 // Use higher-level descriptive keys over generic fieldnames
                 case 'titles':
@@ -169,7 +170,7 @@ class Invenio implements DataRepoSelectorInterface
                     $fieldArray['name'] = 'subject';
                     $fieldArray['field_id'] = $this->fieldIdMap['subject'];
                     break;
-                // Crosswalk key to DC equivalent where necessary
+                    // Crosswalk key to DC equivalent where necessary
                 case 'publicationYear':
                 case 'publication_date':
                 case 'date_published':
@@ -196,47 +197,47 @@ class Invenio implements DataRepoSelectorInterface
                     foreach ($value as $key => $value) {
                         if (is_array($value)) {
                             $iterate($value);
-                        } else if (isset($this->fieldIdMap[$key]) && (!in_array($key, ['title','type', 'date', 'relation', 'identifier'], true))) {
+                        } elseif (isset($this->fieldIdMap[$key]) && (!in_array($key, ['title','type', 'date', 'relation', 'identifier'], true))) {
                             $fieldArray['name'] = $key;
                             $fieldArray['field_id'] = $this->fieldIdMap[$key];
-                            $valueArray['@value'] = (string)$value;
+                            $valueArray['@value'] = (string) $value;
                             $valueArray['type'] = 'literal';
-                        } else if ($key === 'creator_name') {
+                        } elseif ($key === 'creator_name') {
                             $fieldArray['name'] = 'creator';
                             $fieldArray['field_id'] = $this->fieldIdMap['creator'];
-                            $valueArray['@value'] = (string)$value;
+                            $valueArray['@value'] = (string) $value;
                             $valueArray['type'] = 'literal';
-                        } else if ($key === 'contributor_name') {
+                        } elseif ($key === 'contributor_name') {
                             $fieldArray['name'] = 'contributor';
                             $fieldArray['field_id'] = $this->fieldIdMap['contributor'];
-                            $valueArray['@value'] = (string)$value;
+                            $valueArray['@value'] = (string) $value;
                             $valueArray['type'] = 'literal';
-                        } else if ($key === 'keyword') {
+                        } elseif ($key === 'keyword') {
                             $fieldArray['name'] = 'subject';
                             $fieldArray['field_id'] = $this->fieldIdMap['subject'];
-                            $valueArray['@value'] = (string)$value;
+                            $valueArray['@value'] = (string) $value;
                             $valueArray['type'] = 'literal';
-                        } else if ($key === 'attribution') {
+                        } elseif ($key === 'attribution') {
                             $fieldArray['name'] = 'accessRights';
                             $fieldArray['field_id'] = $this->fieldIdMap['accessRights'];
-                            $valueArray['@value'] = (string)$value;
+                            $valueArray['@value'] = (string) $value;
                             $valueArray['type'] = 'literal';
-                        } else if (($key === 'name' || $key === 'title') && isset($fieldArray['name'], $fieldArray['field_id'])) {
+                        } elseif (($key === 'name' || $key === 'title') && isset($fieldArray['name'], $fieldArray['field_id'])) {
                             // Field already set at higher level above
-                            $valueArray['@value'] = (string)$value;
+                            $valueArray['@value'] = (string) $value;
                             $valueArray['type'] = 'literal';
-                        } else if (($key === 'primary' || $key === 'secondary' || is_numeric($key)) && isset($fieldArray['name']) && $fieldArray['name'] === 'subject') {
+                        } elseif (($key === 'primary' || $key === 'secondary' || is_numeric($key)) && isset($fieldArray['name']) && $fieldArray['name'] === 'subject') {
                             // Field already set at higher level above
-                            $valueArray['@value'] = (string)$value;
+                            $valueArray['@value'] = (string) $value;
                             $valueArray['type'] = 'literal';
                             $key = 'keyword';
-                        } else if (($key === 'oai' || $key === 'value' || $key === 'doi') && isset($fieldArray['name']) && $fieldArray['name'] === 'identifier') {
+                        } elseif (($key === 'oai' || $key === 'value' || $key === 'doi') && isset($fieldArray['name']) && $fieldArray['name'] === 'identifier') {
                             // Field already set at higher level above
-                            $valueArray['@value'] = (string)$value;
+                            $valueArray['@value'] = (string) $value;
                             $valueArray['type'] = 'literal';
-                        } else if (($key === 'id' ) && isset($fieldArray['name']) && $fieldArray['name'] === 'license') {
+                        } elseif (($key === 'id') && isset($fieldArray['name']) && $fieldArray['name'] === 'license') {
                             // Field already set at higher level above
-                            $valueArray['@value'] = (string)$value;
+                            $valueArray['@value'] = (string) $value;
                             $valueArray['type'] = 'literal';
                         } else {
                             continue;
@@ -251,17 +252,17 @@ class Invenio implements DataRepoSelectorInterface
                     }
                 };
                 $iterate($value);
-            } else if (isset($this->fieldIdMap[$key])) {
+            } elseif (isset($this->fieldIdMap[$key])) {
                 $fieldArray['name'] = $key;
                 $fieldArray['field_id'] = $this->fieldIdMap[$key];
-                $valueArray['@value'] = (string)$value;
+                $valueArray['@value'] = (string) $value;
                 $valueArray['type'] = 'literal';
                 $valueArray['property_id'] = $fieldArray['field_id'];
                 $itemJson[$fieldArray['name']][] = $valueArray;
-            } else if (strtolower($key) === 'doi') {
+            } elseif (strtolower($key) === 'doi') {
                 $fieldArray['name'] = 'identifier';
                 $fieldArray['field_id'] = $this->fieldIdMap['identifier'];
-                $valueArray['@value'] = (string)$value;
+                $valueArray['@value'] = (string) $value;
                 $valueArray['type'] = 'literal';
                 $valueArray['property_id'] = $fieldArray['field_id'];
                 $itemJson[$fieldArray['name']][] = $valueArray;
@@ -280,11 +281,11 @@ class Invenio implements DataRepoSelectorInterface
         if (!$itemData['files']) {
             return $itemJson;
         }
-        
+
         foreach ($itemData['files'] as $file) {
             if ($file['links']['self']) {
                 $fileURL = $file['links']['self'];
-            } else if ($file['ePIC_PID']) {
+            } elseif ($file['ePIC_PID']) {
                 $fileURL = $file['ePIC_PID'];
             } else {
                 continue;

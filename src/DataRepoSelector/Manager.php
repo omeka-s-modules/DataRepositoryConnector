@@ -9,7 +9,7 @@ class Manager extends AbstractPluginManager
 
     protected $instanceOf = DataRepoSelectorInterface::class;
 
-    public function get($name, array $options = null)
+    public function get($name, ?array $options = null)
     {
         return parent::get($name, $options);
     }

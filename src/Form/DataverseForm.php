@@ -51,14 +51,14 @@ class DataverseForm extends Form
                 'required' => true,
             ],
         ]);
-        
+
         $this->add([
             'name' => 'collection_id',
             'type' => 'text',
             'options' => [
                 'label' => 'Dataverse Identifier', // @translate
                 'info' => 'The identifier of the Dataverse to import from. Listed at end of URL. Example: "odas" from <a target="_blank" href="https://dataverse.harvard.edu/dataverse/odas">https://dataverse.harvard.edu/dataverse/odas</a>. If blank, all datasets under Main Dataverse URL above will be imported.', // @translate
-                'escape_info' => false,    
+                'escape_info' => false,
             ],
             'attributes' => [
                 'id' => 'collection_id',
@@ -97,7 +97,7 @@ class DataverseForm extends Form
                 'value' => '100',
             ],
         ]);
-        
+
         $this->add([
             'name' => 'test_import',
             'type' => 'checkbox',
@@ -169,7 +169,7 @@ class DataverseForm extends Form
             'options' => [
                 'label' => 'Item sets', // @translate
                 'info' => 'Optional. Import items into item set(s).', // @translate
-                'empty_option' => ''
+                'empty_option' => '',
             ],
         ]);
 

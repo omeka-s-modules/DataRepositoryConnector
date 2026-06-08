@@ -3,11 +3,8 @@ namespace DataRepositoryConnector;
 
 use Omeka\Module\AbstractModule;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Laminas\View\Renderer\PhpRenderer;
-use Laminas\Mvc\Controller\AbstractController;
 use Laminas\EventManager\SharedEventManagerInterface;
 use Laminas\Mvc\MvcEvent;
-use FedoraConnector\Form\ConfigForm;
 use Composer\Semver\Comparator;
 
 class Module extends AbstractModule
@@ -25,7 +22,7 @@ class Module extends AbstractModule
             null,
             ['DataRepositoryConnector\Api\Adapter\DataRepositoryItemAdapter'],
             ['search', 'read']
-            );
+        );
     }
 
     public function install(ServiceLocatorInterface $serviceLocator)

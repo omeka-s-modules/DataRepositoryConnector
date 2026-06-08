@@ -37,7 +37,7 @@ class InvenioForm extends Form
                 'value' => 'invenio',
             ],
         ]);
-        
+
         // Add hidden field to designate dcterms metadata format
         $this->add([
             'name' => 'data_md_format',
@@ -47,7 +47,7 @@ class InvenioForm extends Form
                 'value' => 'dcterms',
             ],
         ]);
-        
+
         $this->add([
             'name' => 'main_uri',
             'type' => 'url',
@@ -61,7 +61,7 @@ class InvenioForm extends Form
                 'required' => true,
             ],
         ]);
-        
+
         $this->add([
             'name' => 'collection_id',
             'type' => 'text',
@@ -88,7 +88,7 @@ class InvenioForm extends Form
                 'value' => '100',
             ],
         ]);
-        
+
         $this->add([
             'name' => 'test_import',
             'type' => 'checkbox',
@@ -160,7 +160,7 @@ class InvenioForm extends Form
             'options' => [
                 'label' => 'Item sets', // @translate
                 'info' => 'Optional. Import items into item set(s).', // @translate
-                'empty_option' => ''
+                'empty_option' => '',
             ],
         ]);
 

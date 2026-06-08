@@ -32,12 +32,12 @@ class Undo extends AbstractJob
         ]);
         $comment = implode('; ', $commentParts);
         $dataRepoImportJson = [
-                            'o:job' => ['o:id' => $this->job->getId()],
-                            'comment' => $comment,
-                            'added_count' => 0,
-                            'updated_count' => 0,
-                            'added_files' => 0,
-                          ];
+            'o:job' => ['o:id' => $this->job->getId()],
+            'comment' => $comment,
+            'added_count' => 0,
+            'updated_count' => 0,
+            'added_files' => 0,
+        ];
         $response = $api->create('data_repo_imports', $dataRepoImportJson);
         $jobArgs = $this->job->getArgs();
         $jobArgs['comment'] = $comment;

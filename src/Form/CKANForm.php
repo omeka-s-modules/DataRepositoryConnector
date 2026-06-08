@@ -37,7 +37,7 @@ class CKANForm extends Form
                 'value' => 'ckan',
             ],
         ]);
-        
+
         // Add hidden field to designate dcterms metadata format
         $this->add([
             'name' => 'data_md_format',
@@ -87,7 +87,7 @@ class CKANForm extends Form
                 'value' => '100',
             ],
         ]);
-        
+
         $this->add([
             'name' => 'test_import',
             'type' => 'checkbox',
@@ -159,7 +159,7 @@ class CKANForm extends Form
             'options' => [
                 'label' => 'Item sets', // @translate
                 'info' => 'Optional. Import items into item set(s).', // @translate
-                'empty_option' => ''
+                'empty_option' => '',
             ],
         ]);
 

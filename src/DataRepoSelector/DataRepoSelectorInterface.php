@@ -1,7 +1,6 @@
 <?php
 namespace DataRepositoryConnector\DataRepoSelector;
 
-use Omeka\Api\Representation\ItemRepresentation;
 use Laminas\Http\Response;
 
 /**
@@ -15,7 +14,7 @@ interface DataRepoSelectorInterface
      * @return string
      */
     public function getLabel();
-    
+
     /**
      * Prepare Metadata fields from chosen vocabulary.
      *
@@ -23,7 +22,7 @@ interface DataRepoSelectorInterface
      * @return array
      */
     public function prepareFieldIdMap($dataMetadataFormat);
-    
+
     /**
      * Get initial response from Data Repository for iterating through records.
      *
@@ -54,7 +53,7 @@ interface DataRepoSelectorInterface
      * @return array
      */
     public function processItemMetadata($response, $itemJson);
-    
+
     /**
      * Process & save any files associated with data repository record.
      *

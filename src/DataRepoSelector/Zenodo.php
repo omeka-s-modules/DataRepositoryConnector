@@ -17,7 +17,7 @@ class Zenodo implements DataRepoSelectorInterface
      * @var Settings
      */
     protected $settings;
-    
+
     /**
      * @var ApiManager
      */
@@ -28,11 +28,12 @@ class Zenodo implements DataRepoSelectorInterface
      */
     protected $client;
 
-    public function __construct(ApiManager $apiManager, HttpClient $client) {
+    public function __construct(ApiManager $apiManager, HttpClient $client)
+    {
         $this->apiManager = $apiManager;
         $this->client = $client;
     }
-    
+
     public function getLabel()
     {
         return 'Zenodo'; // @translate
@@ -44,7 +45,7 @@ class Zenodo implements DataRepoSelectorInterface
         $this->fieldIdMap = [];
 
         // Depending on export format, prepare metadata fields
-        switch($this->dataMetadataFormat) {
+        switch ($this->dataMetadataFormat) {
             case 'oai_dc':
                 $this->prefix = 'dcterms';
                 $this->namespace = 'http://purl.org/dc/terms/';
@@ -69,17 +70,17 @@ class Zenodo implements DataRepoSelectorInterface
     {
         $responseArray = [];
         // Iterate through pages
-        $this->page = $this->page ? ++$this->page : 1; 
-        
+        $this->page = $this->page ? ++$this->page : 1;
+
         // Reset parameters if paginating
         $this->client->resetParameters();
         $apiLink = $link . '/api/records/';
         $this->client->setUri($apiLink);
         $this->client->setParameterGet(['q' => 'communities:' . $localId,
-                                        'size' => 25,
-                                        'page' => $this->page,
-                                        'sort' => 'mostrecent'
-                                       ]);
+            'size' => 25,
+            'page' => $this->page,
+            'sort' => 'mostrecent',
+        ]);
 
         $collectionResponse = $this->client->send();
         if (!$collectionResponse->isSuccess()) {
@@ -87,14 +88,14 @@ class Zenodo implements DataRepoSelectorInterface
                 'Requested "%s" got "%s".', $link, $collectionResponse->renderStatusLine()
             ));
         }
-        
+
         $collection = json_decode($collectionResponse->getBody(), true);
         $responseArray['item_count'] = $collection['hits']['total'];
         $responseArray['collection_response'] = $collection['hits']['hits'];
 
         return $responseArray;
     }
-    
+
     public function buildResource($siteUri, $dataMetadataFormat, $ingestFiles, $itemData)
     {
         $itemJson = [];
@@ -109,7 +110,7 @@ class Zenodo implements DataRepoSelectorInterface
         $this->client->setUri($export);
 
         // Change Accept header depending on metadata export format
-        switch($this->dataMetadataFormat) {
+        switch ($this->dataMetadataFormat) {
             case 'oai_dc':
                 $this->client->getRequest()->getHeaders()->addHeaderLine('Accept: application/x-dc+xml');
                 break;
@@ -123,7 +124,7 @@ class Zenodo implements DataRepoSelectorInterface
             ));
         }
         $itemJson = $this->processItemMetadata($response, $itemJson);
-        
+
         if ($ingestFiles) {
             $itemJson = $this->processItemFiles($itemData, $itemJson);
         }
@@ -135,7 +136,7 @@ class Zenodo implements DataRepoSelectorInterface
     public function processItemMetadata($response, $itemJson)
     {
         // Decode XML or JSON depending on response format
-        switch($this->dataMetadataFormat) {
+        switch ($this->dataMetadataFormat) {
             case 'oai_dc':
                 $itemMetadata = simplexml_load_string($response->getBody());
                 $itemMetadataArray = $itemMetadata->children('dc', true);
@@ -145,7 +146,7 @@ class Zenodo implements DataRepoSelectorInterface
                 break;
         }
 
-        foreach ($itemMetadataArray as $key=>$value) {
+        foreach ($itemMetadataArray as $key => $value) {
             if (isset($this->fieldIdMap[$key])) {
                 $fieldArray = [];
                 $fieldArray['name'] = $key;
@@ -162,15 +163,15 @@ class Zenodo implements DataRepoSelectorInterface
                     foreach ($value as $key => $value) {
                         if (is_array($value)) {
                             $iterate($value);
-                        } else if (is_numeric($key) || $key == 'name' || $key == 'text') {
-                            $valueArray['@value'] = (string)$value;
+                        } elseif (is_numeric($key) || $key == 'name' || $key == 'text') {
+                            $valueArray['@value'] = (string) $value;
                             $valueArray['type'] = 'literal';
                             $valueArray['property_id'] = $fieldArray['field_id'];
                             $itemJson[$fieldArray['name']][] = $valueArray;
-                        } else if ($key == 'url') {
+                        } elseif ($key == 'url') {
                             $valueArray['o:label'] = $key;
                             $valueArray['type'] = 'uri';
-                            $valueArray['@id'] = (string)$value;
+                            $valueArray['@id'] = (string) $value;
                             $valueArray['property_id'] = $fieldArray['field_id'];
                             $itemJson[$fieldArray['name']][] = $valueArray;
                         }
@@ -178,7 +179,7 @@ class Zenodo implements DataRepoSelectorInterface
                 };
                 $iterate($value);
             } else {
-                $valueArray['@value'] = (string)$value;
+                $valueArray['@value'] = (string) $value;
                 $valueArray['type'] = 'literal';
                 $valueArray['property_id'] = $fieldArray['field_id'];
                 $itemJson[$fieldArray['name']][] = $valueArray;

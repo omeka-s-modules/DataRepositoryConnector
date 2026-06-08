@@ -5,7 +5,6 @@ use Laminas\Http\Client as HttpClient;
 use Omeka\Api\Manager as ApiManager;
 use Omeka\Settings\Settings as Settings;
 use Omeka\Job\Exception;
-use Laminas\Stdlib\Parameters;
 use DateTime;
 
 /**
@@ -17,7 +16,7 @@ class Dataverse implements DataRepoSelectorInterface
      * @var Settings
      */
     protected $settings;
-    
+
     /**
      * @var ApiManager
      */
@@ -28,11 +27,12 @@ class Dataverse implements DataRepoSelectorInterface
      */
     protected $client;
 
-    public function __construct(ApiManager $apiManager, HttpClient $client) {
+    public function __construct(ApiManager $apiManager, HttpClient $client)
+    {
         $this->apiManager = $apiManager;
         $this->client = $client;
     }
-    
+
     public function getLabel()
     {
         return 'Dataverse'; // @translate
@@ -44,7 +44,7 @@ class Dataverse implements DataRepoSelectorInterface
         $this->fieldIdMap = [];
 
         // Depending on export format, prepare metadata fields
-        switch($this->dataMetadataFormat) {
+        switch ($this->dataMetadataFormat) {
             case 'dcterms':
             case 'oai_dc':
                 $this->prefix = 'dcterms';
@@ -82,11 +82,11 @@ class Dataverse implements DataRepoSelectorInterface
         // If no dataverse id found, import from parent dataverse
         $subcollection = $localId ?: null;
         $this->client->setParameterGet(['q' => '*',
-                                        'type' => 'dataset',
-                                        'subtree' => $subcollection,
-                                        'per_page' => $limit,
-                                        'start' => $offset,
-                                       ]);
+            'type' => 'dataset',
+            'subtree' => $subcollection,
+            'per_page' => $limit,
+            'start' => $offset,
+        ]);
         $response = $this->client->send();
         if (!$response->isSuccess()) {
             throw new Exception\RuntimeException(sprintf(
@@ -100,7 +100,7 @@ class Dataverse implements DataRepoSelectorInterface
 
         return $responseArray;
     }
-    
+
     public function buildResource($siteUri, $dataMetadataFormat, $ingestFiles, $itemData)
     {
         $itemJson = [];
@@ -114,8 +114,8 @@ class Dataverse implements DataRepoSelectorInterface
         $export = $this->siteUri . '/api/datasets/export';
         $this->client->setUri($export);
         $this->client->setParameterGet(['exporter' => $dataMetadataFormat,
-                                        'persistentId' => $itemData['global_id'],
-                                       ]);
+            'persistentId' => $itemData['global_id'],
+        ]);
         $response = $this->client->send();
         if (!$response->isSuccess()) {
             throw new Exception\RuntimeException(sprintf(
@@ -123,7 +123,7 @@ class Dataverse implements DataRepoSelectorInterface
             ));
         }
         $itemJson = $this->processItemMetadata($response, $itemJson);
-        
+
         if ($ingestFiles) {
             $itemJson = $this->processItemFiles($itemData, $itemJson);
         }
@@ -135,7 +135,7 @@ class Dataverse implements DataRepoSelectorInterface
     public function processItemMetadata($response, $itemJson)
     {
         // Decode XML or JSON depending on response format
-        switch($this->dataMetadataFormat) {
+        switch ($this->dataMetadataFormat) {
             case 'ddi':
             case 'oai_ddi':
             case 'dcterms':
@@ -151,7 +151,7 @@ class Dataverse implements DataRepoSelectorInterface
                 break;
         }
 
-        foreach ($itemMetadataArray as $key=>$value) {
+        foreach ($itemMetadataArray as $key => $value) {
             if (isset($this->fieldIdMap[$key])) {
                 $fieldArray = [];
                 $fieldArray['name'] = $key;
@@ -168,15 +168,15 @@ class Dataverse implements DataRepoSelectorInterface
                     foreach ($value as $key => $value) {
                         if (is_array($value)) {
                             $iterate($value);
-                        } else if (is_numeric($key) || $key == 'name' || $key == 'text') {
-                            $valueArray['@value'] = (string)$value;
+                        } elseif (is_numeric($key) || $key == 'name' || $key == 'text') {
+                            $valueArray['@value'] = (string) $value;
                             $valueArray['type'] = 'literal';
                             $valueArray['property_id'] = $fieldArray['field_id'];
                             $itemJson[$fieldArray['name']][] = $valueArray;
-                        } else if ($key == 'url') {
+                        } elseif ($key == 'url') {
                             $valueArray['o:label'] = $key;
                             $valueArray['type'] = 'uri';
-                            $valueArray['@id'] = (string)$value;
+                            $valueArray['@id'] = (string) $value;
                             $valueArray['property_id'] = $fieldArray['field_id'];
                             $itemJson[$fieldArray['name']][] = $valueArray;
                         }
@@ -184,7 +184,7 @@ class Dataverse implements DataRepoSelectorInterface
                 };
                 $iterate($value);
             } else {
-                $valueArray['@value'] = (string)$value;
+                $valueArray['@value'] = (string) $value;
                 $valueArray['type'] = 'literal';
                 $valueArray['property_id'] = $fieldArray['field_id'];
                 $itemJson[$fieldArray['name']][] = $valueArray;

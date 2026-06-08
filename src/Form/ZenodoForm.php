@@ -37,7 +37,7 @@ class ZenodoForm extends Form
                 'value' => 'zenodo',
             ],
         ]);
-        
+
         $this->add([
             'name' => 'main_uri',
             'type' => 'hidden',
@@ -46,7 +46,7 @@ class ZenodoForm extends Form
                 'value' => 'https://zenodo.org',
             ],
         ]);
-        
+
         $this->add([
             'name' => 'collection_id',
             'type' => 'text',
@@ -157,7 +157,7 @@ class ZenodoForm extends Form
             'options' => [
                 'label' => 'Item sets', // @translate
                 'info' => 'Optional. Import items into item set(s).', // @translate
-                'empty_option' => ''
+                'empty_option' => '',
             ],
         ]);
 

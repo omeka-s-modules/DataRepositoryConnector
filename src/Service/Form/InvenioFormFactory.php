@@ -7,7 +7,7 @@ use Interop\Container\ContainerInterface;
 
 class InvenioFormFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $services, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $services, $requestedName, ?array $options = null)
     {
         $form = new InvenioForm;
         $form->setUserSettings($services->get('Omeka\Settings\User'));

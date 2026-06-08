@@ -5,7 +5,6 @@ use Laminas\Http\Client as HttpClient;
 use Omeka\Api\Manager as ApiManager;
 use Omeka\Settings\Settings as Settings;
 use Omeka\Job\Exception;
-use Laminas\Stdlib\Parameters;
 use DateTime;
 
 /**
@@ -17,7 +16,7 @@ class CKAN implements DataRepoSelectorInterface
      * @var Settings
      */
     protected $settings;
-    
+
     /**
      * @var ApiManager
      */
@@ -28,11 +27,12 @@ class CKAN implements DataRepoSelectorInterface
      */
     protected $client;
 
-    public function __construct(ApiManager $apiManager, HttpClient $client) {
+    public function __construct(ApiManager $apiManager, HttpClient $client)
+    {
         $this->apiManager = $apiManager;
         $this->client = $client;
     }
-    
+
     public function getLabel()
     {
         return 'CKAN'; // @translate
@@ -44,7 +44,7 @@ class CKAN implements DataRepoSelectorInterface
         $this->fieldIdMap = [];
 
         // Depending on export format, prepare metadata fields
-        switch($this->dataMetadataFormat) {
+        switch ($this->dataMetadataFormat) {
             case 'dcterms':
                 $this->prefix = 'dct';
                 $this->namespace = 'http://purl.org/dc/terms/';
@@ -91,14 +91,14 @@ class CKAN implements DataRepoSelectorInterface
                 'Requested "%s" got "%s".', $link, $collectionResponse->renderStatusLine()
             ));
         }
-        
+
         $collection = json_decode($collectionResponse->getBody(), true);
         $responseArray['item_count'] = $collection['result']['count'];
         $responseArray['collection_response'] = $collection['result']['results'];
 
         return $responseArray;
     }
-    
+
     public function buildResource($siteUri, $dataMetadataFormat, $ingestFiles, $itemData)
     {
         $itemJson = [];
@@ -121,7 +121,7 @@ class CKAN implements DataRepoSelectorInterface
             ));
         }
         $itemJson = $this->processItemMetadata($response, $itemJson);
-        
+
         if ($ingestFiles) {
             $itemJson = $this->processItemFiles($itemData, $itemJson);
         }
@@ -132,16 +132,16 @@ class CKAN implements DataRepoSelectorInterface
     }
 
     public function processItemMetadata($response, $itemJson)
-    {    
+    {
         $itemMetadata = simplexml_load_string($response->getBody());
-        
+
         // Most CKAN instances use dcat:dataset for data record XML container
-        foreach ($itemMetadata->children('dcat', true) as $child) {    
+        foreach ($itemMetadata->children('dcat', true) as $child) {
             $itemMetadataArray = $child->children($this->prefix, true);
             // Extract dcat fields for keywords
             $itemDcatArray = $child->children('dcat', true);
         }
-        
+
         foreach ($itemMetadataArray as $key => $value) {
             $fieldArray = [];
             if (isset($this->fieldIdMap[$key])) {
@@ -151,7 +151,7 @@ class CKAN implements DataRepoSelectorInterface
             if (!$fieldArray) {
                 continue;
             }
-            
+
             $valueArray = [];
 
             // Handle publisher value in nested foaf array
@@ -160,7 +160,7 @@ class CKAN implements DataRepoSelectorInterface
                     foreach ($value->children('foaf', true) as $key => $value) {
                         if ($value->children('foaf', true)) {
                             $iterate($value);
-                            $valueArray['@value'] = (string)$value;
+                            $valueArray['@value'] = (string) $value;
                             $valueArray['type'] = 'literal';
                             $valueArray['property_id'] = $fieldArray['field_id'];
                             $itemJson[$fieldArray['name']][] = $valueArray;
@@ -169,17 +169,17 @@ class CKAN implements DataRepoSelectorInterface
                 };
                 $iterate($value);
             } else {
-                $valueArray['@value'] = (string)$value;
+                $valueArray['@value'] = (string) $value;
                 $valueArray['type'] = 'literal';
                 $valueArray['property_id'] = $fieldArray['field_id'];
                 $itemJson[$fieldArray['name']][] = $valueArray;
             }
         }
-        
+
         foreach ($itemDcatArray as $key => $value) {
             // Save dcat keywords as dcterms.subject values
             if ($key == 'keyword' && isset($this->fieldIdMap['subject'])) {
-                $valueArray['@value'] = (string)$value;
+                $valueArray['@value'] = (string) $value;
                 $valueArray['type'] = 'literal';
                 $valueArray['property_id'] = $this->fieldIdMap['subject'];
                 $itemJson['subject'][] = $valueArray;

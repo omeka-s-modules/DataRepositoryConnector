@@ -7,7 +7,7 @@ use Interop\Container\ContainerInterface;
 
 class ZenodoFormFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $services, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $services, $requestedName, ?array $options = null)
     {
         $form = new ZenodoForm;
         $form->setUserSettings($services->get('Omeka\Settings\User'));
